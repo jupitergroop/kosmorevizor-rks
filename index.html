@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ГИС «КосмоРевизор» — Корпорация развития и СЭЗ (АО «РКС»)</title>
+<title>ГИС «КосмоРевизор» — Корпорация развития и УК СЭЗ ППК «ФРТ» (АО «РКС»)</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -47,7 +47,7 @@
 
   .workspace {
     display: grid;
-    grid-template-columns: 345px 1fr 395px;
+    grid-template-columns: 348px 1fr 402px;
     flex: 1;
     min-height: calc(100vh - 60px);
   }
@@ -142,29 +142,29 @@
     padding: 2px 7px; border-radius: 4px; white-space: nowrap;
   }
 
-  .poly-beskhoz {
-    top: 56%; left: 56%; width: 215px; height: 112px;
+  .poly-unreg {
+    top: 56%; left: 55%; width: 220px; height: 112px;
     border: 2.5px solid #22c55e; background: rgba(34, 197, 94, 0.18); padding: 12px;
   }
-  .poly-beskhoz .roof {
-    width: 175px; height: 72px; background: #475569; border: 2px solid #4ade80;
+  .poly-unreg .roof {
+    width: 185px; height: 72px; background: #475569; border: 2px solid #4ade80;
     box-shadow: 7px 7px 0 rgba(0,0,0,0.45);
     display: flex; align-items: center; justify-content: center; text-align: center;
     font-size: 10.5px; font-weight: 700; color: #f8fafc; padding: 4px;
   }
-  .poly-beskhoz .poly-label { background: #16a34a; }
+  .poly-unreg .poly-label { background: #16a34a; }
 
-  .poly-phantom {
+  .poly-lost {
     top: 16%; left: 8%; width: 205px; height: 118px;
     border: 3px dashed #ef4444; background: rgba(239, 68, 68, 0.2); padding: 10px;
   }
-  .poly-phantom .ghost-box {
-    width: 160px; height: 72px; border: 2px dotted #fca5a5;
+  .poly-lost .ghost-box {
+    width: 165px; height: 72px; border: 2px dotted #fca5a5;
     display: flex; align-items: center; justify-content: center;
     font-size: 10.5px; font-weight: 700; color: #fecaca; text-align: center;
     background: rgba(127, 29, 29, 0.5); padding: 4px;
   }
-  .poly-phantom .poly-label { background: #dc2626; }
+  .poly-lost .poly-label { background: #dc2626; }
 
   .poly-rt {
     top: 58%; left: 9%; width: 200px; height: 105px;
@@ -178,18 +178,18 @@
   }
   .poly-rt .poly-label { background: #e11d48; }
 
-  .poly-dmg {
-    top: 16%; left: 58%; width: 190px; height: 102px;
+  .poly-kpi {
+    top: 16%; left: 57%; width: 205px; height: 104px;
     border: 2.5px solid #f59e0b; background: rgba(245, 158, 11, 0.18); padding: 10px;
   }
-  .poly-dmg .roof-dmg {
-    width: 155px; height: 62px;
-    background: linear-gradient(120deg, #64748b 58%, #7c2d12 58%);
+  .poly-kpi .roof-kpi {
+    width: 170px; height: 64px;
+    background: linear-gradient(120deg, #0ea5e9 72%, #7c2d12 72%);
     border: 2px solid #fbbf24;
     display: flex; align-items: center; justify-content: center; text-align: center;
-    font-size: 10.5px; font-weight: 700; color: #fef3c7; padding: 4px;
+    font-size: 10.5px; font-weight: 700; color: #fff; padding: 4px;
   }
-  .poly-dmg .poly-label { background: #d97706; }
+  .poly-kpi .poly-label { background: #d97706; }
 
   .poly-flood {
     top: 36%; left: 34%; width: 175px; height: 84px;
@@ -224,7 +224,7 @@
 
   .meta-table { width: 100%; font-size: 11.5px; margin-bottom: 11px; border-collapse: collapse; }
   .meta-table td { padding: 5px 0; border-bottom: 1px solid #1e293b; }
-  .meta-table td:first-child { color: #94a3b8; width: 45%; }
+  .meta-table td:first-child { color: #94a3b8; width: 44%; }
   .meta-table td:last-child { color: #f8fafc; font-weight: 600; text-align: right; }
 
   .xai-box {
@@ -270,100 +270,100 @@
   <div class="brand">
     <div class="logo-dot">РКС</div>
     <div>
-      <h1>ГИС «КосмоРевизор» · Управление площадками Корпорации развития и СЭЗ</h1>
-      <span>Спутники АО «РКС»: «Ресурс-П» (0,7 м) · «Кондор-ФКА» (РСА) · Инвестиционные площадки и промзоны на новых территориях РФ</span>
+      <h1>ГИС «КосмоРевизор» · Корпорация развития и УК СЭЗ (ППК «Фонд развития территорий»)</h1>
+      <span>Ансамбль Late Fusion: Оптика «Ресурс-П» + Сиамский SAR «Кондор-ФКА» · ТЦ, гостиницы, склады и заводы на новых территориях</span>
     </div>
   </div>
   <div class="kpi-bar">
-    <div class="kpi"><div class="val">9 200</div><div class="lbl">Зданий и участков КР / СЭЗ</div></div>
-    <div class="kpi green"><div class="val">3 140</div><div class="lbl">Неоформленные целые здания</div></div>
+    <div class="kpi"><div class="val">9 200</div><div class="lbl">Зданий и площадок КР / ФРТ</div></div>
+    <div class="kpi green"><div class="val">3 140</div><div class="lbl">Целые вне ЕГРН (под аренду)</div></div>
     <div class="kpi red"><div class="val">580</div><div class="lbl">Утрачены / Разрушены</div></div>
-    <div class="kpi cyan"><div class="val">530+</div><div class="lbl">Инвесторов СЭЗ</div></div>
+    <div class="kpi cyan"><div class="val">530+</div><div class="lbl">Резидентов СЭЗ (КПЭ)</div></div>
   </div>
 </header>
 
 <div class="workspace">
   <div class="panel-left">
-    <div class="panel-title">Перечень объектов Корпорации развития и СЭЗ</div>
+    <div class="panel-title">Объекты Корпорации развития и УК СЭЗ (ППК «ФРТ»)</div>
     <div class="filter-row">
       <div class="chip active" onclick="filterList('all', this)">Все (9 200)</div>
-      <div class="chip" onclick="filterList('sez', this)">🟢 Площадки инвесторам</div>
-      <div class="chip" onclick="filterList('loss', this)">🔴 Утрачены / Новые разрушения</div>
+      <div class="chip" onclick="filterList('sez', this)">🟢 Инвесторам / КПЭ СЭЗ</div>
+      <div class="chip" onclick="filterList('loss', this)">🔴 Утрачены / Повреждения</div>
       <div class="chip" onclick="filterList('chs', this)">🌊 Масштаб РФ: ЧС</div>
     </div>
 
     <div class="obj-item selected" data-cat="sez" onclick="selectObj(0)">
       <div class="obj-top">
-        <span class="obj-id">#СЭЗ-29540 · Производственный корпус</span>
-        <span class="badge b-green">Для инвестора СЭЗ</span>
+        <span class="obj-id">#КР-29540 · Торговый центр (ТЦ)</span>
+        <span class="badge b-green">В аренду без торгов</span>
       </div>
-      <div class="obj-sub">Не поставлен на учёт в ЕГРН. По снимку: <strong>сохранное здание 3 200 м²</strong> + ж/д ветка. Готовая площадка для участника СЭЗ.</div>
+      <div class="obj-sub">До передачи: не учтён в ЕГРН. <strong>Целый ТЦ 4 800 м² + парковка</strong>. Готов к передаче инвестору СЭЗ (Пост. № 1099).</div>
     </div>
 
     <div class="obj-item" data-cat="loss" onclick="selectObj(1)">
       <div class="obj-top">
-        <span class="obj-id">#КР-04812 · Производственная база</span>
+        <span class="obj-id">#КР-04812 · Производственный корпус</span>
         <span class="badge b-red">Риск 94 · Утрачено</span>
       </div>
-      <div class="obj-sub">По документам: здание 1 450 м² (идут расходы на охрану).<br>По снимку: <strong>строение разрушено</strong>.</div>
+      <div class="obj-sub">До передачи: в базе числится цех 1 450 м².<br>По снимку и SAR: <strong>разрушен</strong> — нельзя предлагать инвестору.</div>
     </div>
 
     <div class="obj-item" data-cat="loss" onclick="selectObj(2)">
       <div class="obj-top">
-        <span class="obj-id">#СЭЗ-19044 · Складской комплекс</span>
+        <span class="obj-id">#СЭЗ-19044 · Логистический склад</span>
         <span class="badge b-red">Риск 91 · За 48 ч</span>
       </div>
-      <div class="obj-sub">Оперативная фиксация (T<sub>t−1</sub> → T<sub>t</sub>): радар «Кондор-ФКА» выявил новое обрушение кровли сквозь облачность.</div>
+      <div class="obj-sub">Сиамская SAR-сеть (Change Detection T<sub>t−1</sub> → T<sub>t</sub>): новое обрушение кровли склада сквозь облачность.</div>
     </div>
 
     <div class="obj-item" data-cat="sez" onclick="selectObj(3)">
       <div class="obj-top">
-        <span class="obj-id">#СЭЗ-11209 · Инвестплощадка № 14</span>
-        <span class="badge b-amber">Риск 64 · Капремонт</span>
+        <span class="obj-id">#ФРТ-11209 · Гостиница (резидент СЭЗ)</span>
+        <span class="badge b-amber">КПЭ: ремонт 72%</span>
       </div>
-      <div class="obj-sub">Стены целы, повреждено 38% кровли. Подходит под инвестиционный проект капитального ремонта в СЭЗ.</div>
+      <div class="obj-sub">После передачи (контроль УК ППК «ФРТ»): инвестор заменил 72% кровли, на площадке работает техника.</div>
     </div>
 
     <div class="obj-item" data-cat="chs" onclick="selectObj(4)">
       <div class="obj-top">
         <span class="obj-id">#РФ-ОРСК · Масштабирование (ЧС)</span>
-        <span class="badge b-blue">Оценка ущерба</span>
+        <span class="badge b-blue">Ущерб за 2 ч</span>
       </div>
-      <div class="obj-sub">Масштаб на всю РФ (78 000 объектов КР + ЧС): онлайн-подсчёт 248 затопленных зданий за 2 часа.</div>
+      <div class="obj-sub">Масштаб на всю РФ (78 000 объектов + ЧС): онлайн-подсчёт 248 затопленных зданий по радару РКС.</div>
     </div>
   </div>
 
   <div class="map-area">
     <div class="grid-overlay"></div>
     <div class="map-toolbar">
-      <span class="layer-pill on" onclick="this.classList.toggle('on')">Оптика «Ресурс-П» (0,7 м)</span>
-      <span class="layer-pill on" onclick="this.classList.toggle('on')">Контуры зданий ИИ</span>
-      <span class="layer-pill on" onclick="this.classList.toggle('on')">Неучтённые здания (вне ЕГРН)</span>
-      <span class="layer-pill on" onclick="this.classList.toggle('on')">Радар «Кондор-ФКА»</span>
+      <span class="layer-pill on" onclick="this.classList.toggle('on')">Модель А: Оптика (Mask R-CNN / YOLO)</span>
+      <span class="layer-pill on" onclick="this.classList.toggle('on')">Модель Б: Сиамский SAR (VV/VH)</span>
+      <span class="layer-pill on" onclick="this.classList.toggle('on')">Late Fusion (алгоритм Венна)</span>
+      <span class="layer-pill on" onclick="this.classList.toggle('on')">ЕГРН и реестр ФРТ</span>
     </div>
 
     <div class="sat-scene">
       <div class="road-h"></div>
       <div class="road-v"></div>
 
-      <div id="poly-0" class="poly-box poly-beskhoz active-poly" onclick="selectObj(0)">
-        <div class="poly-label">🟢 #СЭЗ-29540 · СОХРАННОЕ ЗДАНИЕ ВНЕ ЕГРН</div>
-        <div class="roof">Целый корпус 3 200 м²<br>(готовая площадка СЭЗ)</div>
+      <div id="poly-0" class="poly-box poly-unreg active-poly" onclick="selectObj(0)">
+        <div class="poly-label">🟢 #КР-29540 · ТЦ 4 800 м² ВНЕ ЕГРН</div>
+        <div class="roof">Целый ТЦ + парковка 120 авто<br>(передача инвестору СЭЗ)</div>
       </div>
 
-      <div id="poly-1" class="poly-box poly-phantom" onclick="selectObj(1)">
+      <div id="poly-1" class="poly-box poly-lost" onclick="selectObj(1)">
         <div class="poly-label">🔴 #КР-04812 · ЗДАНИЕ УТРАЧЕНО (0 м²)</div>
-        <div class="ghost-box">Контур по старым документам (строения нет)</div>
+        <div class="ghost-box">Числится по документам (фактически разрушено)</div>
       </div>
 
       <div id="poly-2" class="poly-box poly-rt" onclick="selectObj(2)">
-        <div class="poly-label">⚡ #СЭЗ-19044 · НОВОЕ ОБРУШЕНИЕ (48 ч)</div>
-        <div class="rt-inner">Радар РСА:<br>разрушение 65% крыши</div>
+        <div class="poly-label">⚡ #СЭЗ-19044 · СИАМСКИЙ SAR (48 ч)</div>
+        <div class="rt-inner">Радар Кондор-ФКА:<br>обрушение 65% крыши склада</div>
       </div>
 
-      <div id="poly-3" class="poly-box poly-dmg" onclick="selectObj(3)">
-        <div class="poly-label">🟡 #СЭЗ-11209 · Повреждение крыши 38%</div>
-        <div class="roof-dmg">Под капитальный ремонт инвестора СЭЗ</div>
+      <div id="poly-3" class="poly-box poly-kpi" onclick="selectObj(3)">
+        <div class="poly-label">🟡 #ФРТ-11209 · КОНТРОЛЬ КПЭ РЕМОНТА</div>
+        <div class="roof-kpi">Гостиница СЭЗ: 72% новой кровли</div>
       </div>
 
       <div id="poly-4" class="poly-box poly-flood" onclick="selectObj(4)">
@@ -373,57 +373,57 @@
     </div>
 
     <div class="map-legend">
-      <span>🟢 <b>Неучтённое целое здание</b> (под передачу инвестору СЭЗ)</span>
-      <span>🔴 <b>Здание утрачено / Новое разрушение</b></span>
-      <span>🟡 <b>Под капремонт</b></span>
-      <span>🌊 <b>Масштаб на РФ: ЧС</b></span>
+      <span>🟢 <b>До передачи: целое здание вне ЕГРН</b> (ТЦ, склад, цех)</span>
+      <span>🔴 <b>Утрачено / Новое разрушение</b></span>
+      <span>🟡 <b>После передачи: КПЭ ремонта СЭЗ</b></span>
+      <span>🌊 <b>Масштаб РФ: ЧС</b></span>
     </div>
   </div>
 
   <div class="panel-right">
-    <div class="panel-title">Цифровой паспорт объекта и обоснование оценки</div>
+    <div class="panel-title">Паспорт объекта · Late Fusion (Модель А + Модель Б)</div>
 
     <div class="score-box" id="score-box">
       <div>
-        <div class="score-lbl" id="o-title">#СЭЗ-29540 · Производственный корпус</div>
-        <div class="score-conf" id="o-sub">Статус: СОХРАННОЕ НЕУЧТЁННОЕ ЗДАНИЕ · Точность: 96%</div>
+        <div class="score-lbl" id="o-title">#КР-29540 · Торговый центр (ТЦ)</div>
+        <div class="score-conf" id="o-sub">ДО ПЕРЕДАЧИ: СОХРАННЫЙ ОБЪЕКТ ВНЕ ЕГРН · Венн: 96%</div>
       </div>
       <div class="score-num" id="o-score">96</div>
     </div>
 
     <table class="meta-table">
-      <tr><td>Оператор управления</td><td id="m-loc">Корпорация развития · Промышленная зона</td></tr>
-      <tr><td>Правовой статус в ЕГРН</td><td id="m-bal">Сведения о собственнике отсутствуют</td></tr>
-      <tr><td>Факт по космоснимку</td><td id="m-ai" style="color:#4ade80;">Здание 3 200 м² (кровля полностью цела)</td></tr>
-      <tr><td>Спутники АО «РКС»</td><td id="m-dates">Ресурс-П + Кондор-ФКА (ноябрь 2026)</td></tr>
-      <tr><td>Практический результат</td><td id="m-cost" style="color:#4ade80;">Передача инвестору СЭЗ без торгов</td></tr>
+      <tr><td>Контур заказчика</td><td id="m-loc">Корпорация развития → УК ППК «ФРТ»</td></tr>
+      <tr><td>Статус в ЕГРН</td><td id="m-bal">Правообладатель не оформлен</td></tr>
+      <tr><td>Модель А (Оптика)</td><td id="m-ai" style="color:#4ade80;">ТЦ 4 800 м², крыша цела, парковка 120 мест</td></tr>
+      <tr><td>Модель Б (Сиамский SAR)</td><td id="m-dates">Кондор-ФКА (VV/VH): жёсткий контур стабилен</td></tr>
+      <tr><td>Юридическое действие</td><td id="m-cost" style="color:#4ade80;">Аренда без торгов (Пост. № 1099 / СЭЗ)</td></tr>
     </table>
 
     <div class="xai-box">
-      <div class="panel-title" style="margin-bottom:7px;">Факторы автоматической оценки</div>
+      <div class="panel-title" style="margin-bottom:7px;">Вклад ветвей ансамбля Late Fusion</div>
       <div class="xai-row">
-        <div class="xai-top"><span id="f1-n">Сохранность кровли и стен здания</span><strong id="f1-v" style="color:#4ade80;">+48 б.</strong></div>
-        <div class="bar-bg"><div class="bar-fill" id="f1-b" style="width:92%; background:#22c55e;"></div></div>
+        <div class="xai-top"><span id="f1-n">Модель А (Mask R-CNN): целая кровля 4 800 м²</span><strong id="f1-v" style="color:#4ade80;">94%</strong></div>
+        <div class="bar-bg"><div class="bar-fill" id="f1-b" style="width:94%; background:#22c55e;"></div></div>
       </div>
       <div class="xai-row">
-        <div class="xai-top"><span id="f2-n">Отсутствие постановки на кадастровый учёт</span><strong id="f2-v" style="color:#38bdf8;">+28 б.</strong></div>
-        <div class="bar-bg"><div class="bar-fill" id="f2-b" style="width:76%; background:#38bdf8;"></div></div>
+        <div class="xai-top"><span id="f2-n">Модель Б (Сиамский SAR): нет деформаций</span><strong id="f2-v" style="color:#38bdf8;">97%</strong></div>
+        <div class="bar-bg"><div class="bar-fill" id="f2-b" style="width:97%; background:#38bdf8;"></div></div>
       </div>
       <div class="xai-row">
-        <div class="xai-top"><span id="f3-n">Наличие подъездной дороги и ж/д ветки</span><strong id="f3-v" style="color:#4ade80;">+20 б.</strong></div>
-        <div class="bar-bg"><div class="bar-fill" id="f3-b" style="width:65%; background:#22c55e;"></div></div>
+        <div class="xai-top"><span id="f3-n">Модель А (YOLO): подъезд и парковка ТЦ целы</span><strong id="f3-v" style="color:#4ade80;">91%</strong></div>
+        <div class="bar-bg"><div class="bar-fill" id="f3-b" style="width:91%; background:#22c55e;"></div></div>
       </div>
     </div>
 
     <div class="explain-text" id="o-exp">
-      <strong>Рекомендация для Корпорации развития:</strong> Выявлено сохранное производственное здание (3 200 м²) без оформленного правообладателя в ЕГРН. Рекомендуется оформить в государственную собственность и включить в перечень <strong>инвестиционных площадок для передачи участнику СЭЗ без торгов</strong>.
+      <strong>Решение до передачи инвестору:</strong> Позднее объединение (Late Fusion) подтвердило сохранное здание торгового центра (4 800 м²) с готовой парковкой без оформленного собственника в ЕГРН. Рекомендуется оформить в госсобственность и передать инвестору через <strong>Корпорацию развития / ППК «ФРТ» в аренду без торгов</strong>.
     </div>
 
     <div class="toast" id="toast-msg"></div>
 
     <div class="btn-group">
-      <button class="btn btn-success" id="btn-main" onclick="triggerAction('main')">🏛 Включить в перечень площадок Корпорации развития и СЭЗ</button>
-      <button class="btn btn-primary" onclick="triggerAction('field')">📍 Направить инженера на выездной осмотр</button>
+      <button class="btn btn-success" id="btn-main" onclick="triggerAction('main')">🏛 Включить в реестр площадок КР и УК СЭЗ (ППК «ФРТ»)</button>
+      <button class="btn btn-primary" onclick="triggerAction('field')">📍 Направить инженера на контрольный осмотр</button>
       <button class="btn btn-outline" onclick="triggerAction('export')">⬇ Выгрузить паспорт PDF и координаты для ЕГРН</button>
     </div>
   </div>
@@ -432,93 +432,93 @@
 <script>
 const objects = [
   {
-    title: "#СЭЗ-29540 · Производственный корпус",
-    sub: "Статус: СОХРАННОЕ НЕУЧТЁННОЕ ЗДАНИЕ · Точность: 96%",
+    title: "#КР-29540 · Торговый центр (ТЦ)",
+    sub: "ДО ПЕРЕДАЧИ: СОХРАННЫЙ ОБЪЕКТ ВНЕ ЕГРН · Венн: 96%",
     score: "96",
     bg: "linear-gradient(135deg, #14532d, #166534)", border: "#22c55e",
-    loc: "Корпорация развития · Промышленная зона",
-    bal: "Сведения о собственнике отсутствуют",
-    ai: "Здание 3 200 м² (кровля полностью цела)", aiColor: "#4ade80",
-    dates: "Ресурс-П + Кондор-ФКА (ноябрь 2026)",
-    cost: "Передача инвестору СЭЗ без торгов", costColor: "#4ade80",
+    loc: "Корпорация развития → УК ППК «ФРТ»",
+    bal: "Правообладатель не оформлен",
+    ai: "ТЦ 4 800 м², крыша цела, парковка 120 мест", aiColor: "#4ade80",
+    dates: "Кондор-ФКА (VV/VH): жёсткий контур стабилен",
+    cost: "Аренда без торгов (Пост. № 1099 / СЭЗ)", costColor: "#4ade80",
     factors: [
-      ["Сохранность кровли и стен здания", "+48 б.", "92%", "#22c55e"],
-      ["Отсутствие постановки на кадастровый учёт", "+28 б.", "76%", "#38bdf8"],
-      ["Наличие подъездной дороги и ж/д ветки", "+20 б.", "65%", "#22c55e"]
+      ["Модель А (Mask R-CNN): целая кровля 4 800 м²", "94%", "94%", "#22c55e"],
+      ["Модель Б (Сиамский SAR): нет деформаций", "97%", "97%", "#38bdf8"],
+      ["Модель А (YOLO): подъезд и парковка ТЦ целы", "91%", "91%", "#22c55e"]
     ],
-    exp: "<strong>Рекомендация для Корпорации развития:</strong> Выявлено сохранное производственное здание (3 200 м²) без оформленного правообладателя в ЕГРН. Рекомендуется оформить в государственную собственность и включить в перечень <strong>инвестиционных площадок для передачи участнику СЭЗ без торгов</strong>.",
-    btnText: "🏛 Включить в перечень площадок Корпорации развития и СЭЗ", btnClass: "btn btn-success"
+    exp: "<strong>Решение до передачи инвестору:</strong> Позднее объединение (Late Fusion) подтвердило сохранное здание торгового центра (4 800 м²) с готовой парковкой без оформленного собственника в ЕГРН. Рекомендуется оформить в госсобственность и передать инвестору через <strong>Корпорацию развития / ППК «ФРТ» в аренду без торгов</strong>.",
+    btnText: "🏛 Включить в реестр площадок КР и УК СЭЗ (ППК «ФРТ»)", btnClass: "btn btn-success"
   },
   {
-    title: "#КР-04812 · Производственная база",
-    sub: "Статус: ЗДАНИЕ УТРАЧЕНО · Точность: 94%",
+    title: "#КР-04812 · Производственный корпус",
+    sub: "ДО ПЕРЕДАЧИ: ЗДАНИЕ УТРАЧЕНО · Венн: 94%",
     score: "94",
     bg: "linear-gradient(135deg, #450a0a, #7f1d1d)", border: "#ef4444",
-    loc: "Новые субъекты РФ · Промышленный узел № 3",
-    bal: "Числится здание 1 450 м² (оплачивается охрана)",
-    ai: "0 м² — здание разрушено (−100%)", aiColor: "#f87171",
-    dates: "14.05.2025 → 02.11.2026 (Безоблачно)",
-    cost: "1,86 млн ₽ / год экономии бюджета", costColor: "#f87171",
+    loc: "Реестр Корпорации развития · Промзона № 3",
+    bal: "Числится корпус 1 450 м² (оплачивается охрана)",
+    ai: "0 м² — здание физически разрушено", aiColor: "#f87171",
+    dates: "Сиамский SAR: потеря жёсткой конструкции",
+    cost: "Исключить из витрины + 1,86 млн ₽/год экономии", costColor: "#f87171",
     factors: [
-      ["Отсутствие здания в учётном контуре участка", "+58 б.", "95%", "#ef4444"],
-      ["Подтверждение сноса по радару «Кондор-ФКА»", "+21 б.", "68%", "#f97316"],
-      ["Зарастание участка и отсутствие транспорта", "+15 б.", "48%", "#eab308"]
+      ["Модель А (Mask R-CNN): отсутствие крыши и стен", "95%", "95%", "#ef4444"],
+      ["Модель Б (Сиамский SAR): падение отклика VV/VH", "93%", "93%", "#f97316"],
+      ["Модель А (YOLO): отсутствие транспорта и дорог", "88%", "88%", "#eab308"]
     ],
-    exp: "<strong>Рекомендация:</strong> На земельном участке здание (1 450 м²) физически отсутствует. Рекомендуется <strong>прекратить бюджетные расходы на коммунальные услуги и охрану</strong>, списать утраченное строение и предлагать инвесторам свободный земельный участок.",
-    btnText: "⛔ Прекратить расходы на содержание и обновить реестр", btnClass: "btn btn-danger"
+    exp: "<strong>Защита инвестора и бюджета:</strong> Нельзя предлагать резиденту СЭЗ здание, существующее только на бумаге. Спутник подтвердил физическую утрату корпуса: объект исключается из инвестиционной витрины, прекращаются расходы на охрану.",
+    btnText: "⛔ Исключить из предложений инвесторам и списать затраты", btnClass: "btn btn-danger"
   },
   {
-    title: "#СЭЗ-19044 · Складской комплекс",
-    sub: "Статус: НОВОЕ ПОВРЕЖДЕНИЕ ЗА 48 Ч · Точность: 91%",
+    title: "#СЭЗ-19044 · Логистический склад",
+    sub: "ВСЕПОГОДНЫЙ РАДАР: ОБРУШЕНИЕ ЗА 48 Ч · Венн: 91%",
     score: "91",
     bg: "linear-gradient(135deg, #4c0519, #9f1239)", border: "#f43f5e",
-    loc: "Инвестиционная площадка · Логистический узел",
-    bal: "Здание 2 800 м² в реестре Корпорации развития",
-    ai: "Новое обрушение 65% кровли", aiColor: "#fda4af",
-    dates: "Кондор-ФКА: 10.11 → 12.11.2026 (сквозь облака)",
-    cost: "Оперативное обновление реестра за 3 часа", costColor: "#fda4af",
+    loc: "Логистический комплекс · Контур ППК «ФРТ»",
+    bal: "Склад 2 800 м² в государственном управлении",
+    ai: "Сплошная облачность (оптика ожидает окна)", aiColor: "#fda4af",
+    dates: "Сиамский SAR (10.11 → 12.11): обрушение 65%",
+    cost: "Экстренное обновление статуса за 3 часа", costColor: "#fda4af",
     factors: [
-      ["Изменение радарного отклика за 48 часов", "+52 б.", "90%", "#f43f5e"],
-      ["Степень разрушения по нейросети (xBD)", "+29 б.", "75%", "#ef4444"],
-      ["Прекращение движения грузового транспорта", "+10 б.", "40%", "#fbbf24"]
+      ["Модель Б (Сиамский SAR): скачок изменений T_t−1 → T_t", "92%", "92%", "#f43f5e"],
+      ["Поляризация VV/VH: потеря металлической кровли", "89%", "89%", "#ef4444"],
+      ["Вес Модели Б при облачности 100% (Late Fusion)", "100%", "100%", "#38bdf8"]
     ],
-    exp: "<strong>Оперативный мониторинг:</strong> Всепогодный радар «Кондор-ФКА» сквозь облачность зафиксировал свежее обрушение 65% кровли. Статус объекта в базе Корпорации развития обновлён дистанционно без риска для сотрудников.",
-    btnText: "⚡ Зафиксировать аварийный статус объекта в реестре", btnClass: "btn btn-danger"
+    exp: "<strong>Преимущество Late Fusion:</strong> Несмотря на 100% облачность, сиамская радарная Модель Б («Кондор-ФКА») без проблемы совмещения с оптикой зафиксировала обрушение 65% крыши склада.",
+    btnText: "⚡ Зафиксировать аварийный статус склада в реестре ФРТ", btnClass: "btn btn-danger"
   },
   {
-    title: "#СЭЗ-11209 · Инвестплощадка № 14 (цех)",
-    sub: "Статус: ЧАСТИЧНОЕ ПОВРЕЖДЕНИЕ · Точность: 89%",
-    score: "64",
+    title: "#ФРТ-11209 · Гостиничный комплекс (СЭЗ)",
+    sub: "ПОСЛЕ ПЕРЕДАЧИ: КОНТРОЛЬ КПЭ ИНВЕСТОРА · Венн: 93%",
+    score: "72%",
     bg: "linear-gradient(135deg, #451a03, #78350f)", border: "#f59e0b",
-    loc: "Промышленная площадка Корпорации развития",
-    bal: "Цех 1 950 м² (подбор инвестора)",
-    ai: "Стены целы, повреждено 38% кровли", aiColor: "#fde68a",
-    dates: "Ресурс-П (0,7 м) · 04.11.2026",
-    cost: "Передача под проект капитального ремонта СЭЗ", costColor: "#fde68a",
+    loc: "УК СЭЗ ППК «Фонд развития территорий»",
+    bal: "Передан в аренду резиденту СЭЗ под капремонт",
+    ai: "Уложено 72% новой кровли, 14 ед. спецтехники", aiColor: "#fde68a",
+    dates: "Сиамский SAR: новая жёсткая конструкция крыши",
+    cost: "Подтверждение КПЭ договора СЭЗ без выезда", costColor: "#4ade80",
     factors: [
-      ["Локальное повреждение кровли (38% площади)", "+38 б.", "64%", "#f59e0b"],
-      ["Сохранность несущих стен и контура", "Норма", "85%", "#22c55e"],
-      ["Свободный подъезд для строительной техники", "+26 б.", "52%", "#38bdf8"]
+      ["Модель А (Mask R-CNN): прирост новой кровли +72%", "94%", "72%", "#22c55e"],
+      ["Модель Б (Сиамский SAR): рост отражения крыши", "91%", "91%", "#38bdf8"],
+      ["Модель А (YOLO): стройплощадка и техника активны", "90%", "90%", "#f59e0b"]
     ],
-    exp: "<strong>Рекомендация:</strong> Несущие конструкции сохранены, требуется ремонт кровли (входит в льготный инвестиционный договор участника СЭЗ). Назначается адресный выезд инженера для расчёта сметы.",
-    btnText: "🔧 Назначить инженерный осмотр под проект капремонта", btnClass: "btn btn-primary"
+    exp: "<strong>Контроль после передачи бизнесу:</strong> Резидент СЭЗ получает налоговые льготы (0% налог на прибыль) под обязательство реконструкции гостиницы. Ансамбль моделей дистанционно подтверждает выполнение графика ремонта кровли для ППК «ФРТ».",
+    btnText: "✅ Подтвердить выполнение этапа КПЭ в ППК «ФРТ»", btnClass: "btn btn-success"
   },
   {
     title: "#РФ-ОРСК · Масштабирование на всю РФ (ЧС)",
-    sub: "ОЦЕНКА УЩЕРБА ПРИ ПАВОДКЕ · Точность: 95%",
+    sub: "ОНЛАЙН-ОЦЕНКА УЩЕРБА ПАВОДКА · Венн: 95%",
     score: "ЧС",
     bg: "linear-gradient(135deg, #0c4a6e, #0369a1)", border: "#38bdf8",
-    loc: "Масштабирование на РФ · Оренбургская обл.",
-    bal: "Жилая застройка и коммунальные объекты",
-    ai: "248 зданий и 3 подстанции в зоне затопления", aiColor: "#7dd3fc",
-    dates: "Канопус-В + радар Кондор-ФКА (онлайн)",
-    cost: "Готовый перечень ущерба за 2 часа", costColor: "#7dd3fc",
+    loc: "Масштабирование на РФ · МЧС и ППК «ФРТ»",
+    bal: "Жилая, торговая и коммунальная застройка",
+    ai: "248 зданий и 3 подстанции в контуре воды", aiColor: "#7dd3fc",
+    dates: "Кондор-ФКА + Канопус-В (за 2 часа сквозь облака)",
+    cost: "Пообъектный реестр ущерба для выплат", costColor: "#7dd3fc",
     factors: [
-      ["Граница воды по радару сквозь облачность", "248 зданий", "94%", "#38bdf8"],
-      ["Автоматическая сверка с кадастровой картой", "100% авт.", "90%", "#22c55e"],
-      ["Подтопленные участки дорог и подстанции", "3 узла", "60%", "#fbbf24"]
+      ["Модель Б (SAR): зеркальное отражение воды сквозь тучи", "96%", "96%", "#38bdf8"],
+      ["Сверка зоны разлива с контурами зданий ЕГРН", "95%", "95%", "#22c55e"],
+      ["Модель А (Оптика): уточнение класса зданий", "92%", "92%", "#fbbf24"]
     ],
-    exp: "<strong>Масштабирование на всю Россию:</strong> При прорыве дамбы (как в Орске) или крупных пожарах тот же алгоритм за 2 часа формирует для МЧС и региона точный пообъектный список пострадавших зданий для расчёта выплат.",
+    exp: "<strong>Масштабирование на всю РФ:</strong> При прорыве дамбы (как в Орске) или пожарах связка радара «Кондор-ФКА» и оптики за 2 часа выдаёт МЧС и ППК «ФРТ» точный список пострадавших домов и ТЦ для выплат.",
     btnText: "🌊 Выгрузить пообъектный перечень пострадавших зданий", btnClass: "btn btn-primary"
   }
 ];
@@ -578,9 +578,9 @@ function triggerAction(kind) {
   const t = document.getElementById('toast-msg');
   const title = document.getElementById('o-title').textContent;
   if (kind === 'main') {
-    t.textContent = '✓ Сформирован проект документа по объекту «' + title + '» для Корпорации развития.';
+    t.textContent = '✓ Сформирован проект документа по объекту «' + title + '» для Корпорации развития и ППК «ФРТ».';
   } else if (kind === 'field') {
-    t.textContent = '✓ Координаты и космоснимок направлены инженеру для выездного осмотра.';
+    t.textContent = '✓ Координаты и космоснимок направлены инженеру для контрольного осмотра.';
   } else {
     t.textContent = '✓ Выгружен паспорт PDF и файл координат GeoJSON для внесения в ЕГРН.';
   }
