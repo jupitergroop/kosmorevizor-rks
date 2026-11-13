@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ГИС «КосмоРевизор» — Инвентаризация, оценка и управление (АО «РКС»)</title>
+<title>ГИС «КосмоРевизор» — Команда 15 · АО «Российские космические системы»</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -17,30 +18,35 @@
   header {
     background: #0f172a;
     border-bottom: 1px solid #1e293b;
-    padding: 10px 18px;
+    padding: 9px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
   }
-  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 11px; }
   .logo-dot {
-    width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+    width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
     background: linear-gradient(135deg, #2563eb, #06b6d4);
     display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 14px; color: #fff;
+    font-weight: 800; font-size: 13px; color: #fff;
     box-shadow: 0 0 14px rgba(37,99,235,0.45);
   }
-  .brand h1 { font-size: 15.5px; font-weight: 700; color: #f8fafc; }
-  .brand span { font-size: 11.5px; color: #94a3b8; display: block; margin-top: 2px; }
-  .kpi-bar { display: flex; gap: 9px; flex-wrap: wrap; }
+  .brand h1 { font-size: 15px; font-weight: 700; color: #f8fafc; }
+  .brand span { font-size: 11.2px; color: #94a3b8; display: block; margin-top: 2px; }
+  .team-pill {
+    display: inline-block; background: #1e3a8a; color: #bfdbfe;
+    border: 1px solid #3b82f6; border-radius: 5px; padding: 1px 7px;
+    font-size: 10.5px; font-weight: 700; margin-left: 6px;
+  }
+  .kpi-bar { display: flex; gap: 8px; flex-wrap: wrap; }
   .kpi {
     background: #1e293b; border: 1px solid #334155; border-radius: 8px;
-    padding: 5px 10px; text-align: right;
+    padding: 4px 9px; text-align: right;
   }
-  .kpi .val { font-size: 14px; font-weight: 800; color: #fff; }
-  .kpi .lbl { font-size: 10px; color: #94a3b8; }
+  .kpi .val { font-size: 13.5px; font-weight: 800; color: #fff; }
+  .kpi .lbl { font-size: 9.8px; color: #94a3b8; }
   .kpi.red .val { color: #f87171; }
   .kpi.green .val { color: #4ade80; }
   .kpi.cyan .val { color: #38bdf8; }
@@ -48,7 +54,7 @@
 
   .workspace {
     display: grid;
-    grid-template-columns: 355px 1fr 405px;
+    grid-template-columns: 360px 1fr 415px;
     flex: 1;
     min-height: calc(100vh - 60px);
   }
@@ -56,14 +62,14 @@
     background: #0f172a;
     border-right: 1px solid #1e293b;
     display: flex; flex-direction: column;
-    padding: 12px;
+    padding: 11px;
     overflow-y: auto;
   }
   .panel-title {
-    font-size: 11px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.05em; color: #93c5fd; margin-bottom: 8px;
+    font-size: 10.8px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.05em; color: #93c5fd; margin-bottom: 7px;
   }
-  .filter-row { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
+  .filter-row { display: flex; gap: 5px; margin-bottom: 9px; flex-wrap: wrap; }
   .chip {
     font-size: 10.5px; padding: 4px 8px; border-radius: 6px;
     background: #1e293b; color: #cbd5e1; border: 1px solid #334155; cursor: pointer;
@@ -73,192 +79,111 @@
 
   .obj-item {
     background: #1e293b; border: 1px solid #334155; border-radius: 8px;
-    padding: 8px 10px; margin-bottom: 7px; cursor: pointer; transition: 0.15s;
+    padding: 8px 10px; margin-bottom: 6px; cursor: pointer; transition: 0.15s;
   }
   .obj-item:hover { border-color: #60a5fa; }
   .obj-item.selected { border: 2px solid #3b82f6; background: #172554; }
   .obj-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 3px; }
-  .obj-id { font-size: 11.8px; font-weight: 700; color: #f8fafc; }
-  .badge { font-size: 9.8px; font-weight: 700; padding: 2px 7px; border-radius: 99px; white-space: nowrap; }
+  .obj-id { font-size: 11.6px; font-weight: 700; color: #f8fafc; }
+  .badge { font-size: 9.6px; font-weight: 700; padding: 2px 7px; border-radius: 99px; white-space: nowrap; }
   .b-red { background: #7f1d1d; color: #fecaca; }
   .b-amber { background: #78350f; color: #fde68a; }
   .b-green { background: #14532d; color: #bbf7d0; }
   .b-blue { background: #0c4a6e; color: #bae6fd; }
   .b-purple { background: #4c1d95; color: #ddd6fe; }
-  .obj-sub { font-size: 10.8px; color: #cbd5e1; line-height: 1.32; }
+  .obj-sub { font-size: 10.7px; color: #cbd5e1; line-height: 1.32; }
 
   .map-area {
     position: relative;
-    min-height: 440px;
+    min-height: 460px;
+    background: #0d1624;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  #sat-map {
+    flex: 1;
+    width: 100%;
+    min-height: 420px;
+    z-index: 1;
     background:
       radial-gradient(circle at 30% 35%, rgba(22, 101, 52, 0.35), transparent 55%),
       radial-gradient(circle at 72% 65%, rgba(30, 58, 138, 0.38), transparent 50%),
       linear-gradient(160deg, #17221f 0%, #131d28 52%, #19231c 100%);
-    overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .grid-overlay {
-    position: absolute; inset: 0; pointer-events: none;
-    background-image:
-      linear-gradient(rgba(148,163,184,0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(148,163,184,0.08) 1px, transparent 1px);
-    background-size: 46px 46px;
   }
   .map-toolbar {
-    position: absolute; top: 12px; left: 12px; right: 12px; z-index: 5;
+    position: absolute; top: 10px; left: 52px; right: 12px; z-index: 500;
     background: rgba(15, 23, 42, 0.92); border: 1px solid #334155;
-    border-radius: 8px; padding: 7px 10px; display: flex; gap: 7px; font-size: 11px; flex-wrap: wrap;
+    border-radius: 8px; padding: 6px 10px; display: flex; gap: 6px; font-size: 10.8px; flex-wrap: wrap;
+    align-items: center;
   }
   .layer-pill {
-    padding: 4px 9px; border-radius: 5px; background: #1e293b; color: #cbd5e1;
-    cursor: pointer; border: 1px solid #334155; user-select: none;
+    padding: 4px 8px; border-radius: 5px; background: #1e293b; color: #cbd5e1;
+    cursor: pointer; border: 1px solid #334155; user-select: none; font-size: 10.5px;
   }
   .layer-pill.on { background: #2563eb; border-color: #60a5fa; color: #fff; font-weight: 600; }
 
-  .sat-scene {
-    width: 90%; height: 76%; position: relative; margin-top: 22px;
-    border: 1px solid rgba(148,163,184,0.28); border-radius: 10px;
-    background:
-      repeating-linear-gradient(28deg, rgba(43,60,46,0.52) 0px, rgba(43,60,46,0.52) 24px, rgba(31,45,36,0.64) 24px, rgba(31,45,36,0.64) 48px);
-    overflow: hidden;
+  .map-overlay-card {
+    position: absolute; bottom: 48px; left: 12px; z-index: 500;
+    max-width: 410px;
+    background: rgba(15, 23, 42, 0.93); border: 1px solid #475569;
+    border-radius: 8px; padding: 8px 11px; font-size: 11px; line-height: 1.35;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
   }
-  .road-h {
-    position: absolute; top: 49%; left: -5%; right: -5%; height: 18px;
-    background: #334155; border-top: 2px dashed #94a3b8; border-bottom: 2px solid #475569;
-    transform: rotate(-5deg);
-  }
-  .road-v {
-    position: absolute; top: -5%; bottom: -5%; left: 53%; width: 14px;
-    background: #334155; border-left: 1px dashed #94a3b8; transform: rotate(7deg);
-  }
-  .poly-box {
-    position: absolute; cursor: pointer; transition: transform 0.18s, box-shadow 0.18s;
-    border-radius: 5px;
-  }
-  .poly-box:hover { transform: scale(1.03); }
-  .poly-box.active-poly { box-shadow: 0 0 0 3px #fff, 0 0 22px rgba(59,130,246,0.9); z-index: 4; }
-
-  .poly-label {
-    position: absolute; top: -22px; left: 0;
-    color: #fff; font-size: 10px; font-weight: 700;
-    padding: 2px 7px; border-radius: 4px; white-space: nowrap;
-  }
-
-  .poly-unreg {
-    top: 56%; left: 56%; width: 215px; height: 108px;
-    border: 2.5px solid #22c55e; background: rgba(34, 197, 94, 0.18); padding: 11px;
-  }
-  .poly-unreg .roof {
-    width: 182px; height: 70px; background: #475569; border: 2px solid #4ade80;
-    box-shadow: 7px 7px 0 rgba(0,0,0,0.45);
-    display: flex; align-items: center; justify-content: center; text-align: center;
-    font-size: 10.5px; font-weight: 700; color: #f8fafc; padding: 4px;
-  }
-  .poly-unreg .poly-label { background: #16a34a; }
-
-  .poly-lost {
-    top: 15%; left: 7%; width: 205px; height: 112px;
-    border: 3px dashed #ef4444; background: rgba(239, 68, 68, 0.2); padding: 10px;
-  }
-  .poly-lost .ghost-box {
-    width: 165px; height: 70px; border: 2px dotted #fca5a5;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10.5px; font-weight: 700; color: #fecaca; text-align: center;
-    background: rgba(127, 29, 29, 0.5); padding: 4px;
-  }
-  .poly-lost .poly-label { background: #dc2626; }
-
-  .poly-rt {
-    top: 58%; left: 8%; width: 200px; height: 104px;
-    border: 2.5px solid #f43f5e; background: rgba(244, 63, 94, 0.22); padding: 10px;
-  }
-  .poly-rt .rt-inner {
-    width: 165px; height: 64px;
-    background: repeating-linear-gradient(45deg, #881337, #881337 8px, #4c0519 8px, #4c0519 16px);
-    border: 1.5px solid #fda4af; display: flex; align-items: center; justify-content: center;
-    font-size: 10.5px; font-weight: 700; color: #ffe4e6; text-align: center; padding: 4px;
-  }
-  .poly-rt .poly-label { background: #e11d48; }
-
-  .poly-kpi {
-    top: 15%; left: 57%; width: 205px; height: 104px;
-    border: 2.5px solid #f59e0b; background: rgba(245, 158, 11, 0.18); padding: 10px;
-  }
-  .poly-kpi .roof-kpi {
-    width: 170px; height: 64px;
-    background: linear-gradient(120deg, #0ea5e9 72%, #7c2d12 72%);
-    border: 2px solid #fbbf24;
-    display: flex; align-items: center; justify-content: center; text-align: center;
-    font-size: 10.5px; font-weight: 700; color: #fff; padding: 4px;
-  }
-  .poly-kpi .poly-label { background: #d97706; }
-
-  .poly-rf2 {
-    top: 36%; left: 32%; width: 195px; height: 88px;
-    border: 2.5px solid #a855f7; background: rgba(168, 85, 247, 0.24); padding: 8px;
-    display: none;
-  }
-  .poly-rf2.show { display: block; }
-  .poly-rf2 .poly-label { background: #7e22ce; }
-
-  .poly-flood {
-    top: 36%; left: 32%; width: 195px; height: 88px;
-    border: 2px dashed #38bdf8; background: rgba(14, 165, 233, 0.28); padding: 8px;
-    display: none;
-  }
-  .poly-flood.show { display: block; }
-  .poly-flood .poly-label { background: #0284c7; }
+  .map-overlay-card strong { color: #93c5fd; }
 
   .map-legend {
-    position: absolute; bottom: 10px; left: 12px; right: 12px;
-    background: rgba(15, 23, 42, 0.92); border: 1px solid #334155;
-    border-radius: 8px; padding: 7px 12px; display: flex; gap: 12px; font-size: 10.8px; flex-wrap: wrap;
+    position: absolute; bottom: 8px; left: 12px; right: 12px; z-index: 500;
+    background: rgba(15, 23, 42, 0.94); border: 1px solid #334155;
+    border-radius: 8px; padding: 6px 11px; display: flex; justify-content: space-between;
+    gap: 10px; font-size: 10.5px; flex-wrap: wrap; color: #cbd5e1;
   }
 
   .panel-right {
     background: #0f172a;
     border-left: 1px solid #1e293b;
-    padding: 13px 15px;
+    padding: 12px 14px;
     display: flex; flex-direction: column;
     overflow-y: auto;
   }
   .score-box {
-    background: linear-gradient(135deg, #14532d, #166534);
-    border: 1px solid #22c55e; border-radius: 10px;
-    padding: 11px 12px; margin-bottom: 11px;
+    background: linear-gradient(135deg, #450a0a, #7f1d1d);
+    border: 1px solid #ef4444; border-radius: 10px;
+    padding: 10px 12px; margin-bottom: 10px;
     display: flex; justify-content: space-between; align-items: center; gap: 8px;
   }
-  .score-num { font-size: 26px; font-weight: 800; color: #fff; line-height: 1; }
+  .score-num { font-size: 25px; font-weight: 800; color: #fff; line-height: 1; text-align: right; }
   .score-lbl { font-size: 12px; font-weight: 700; color: #fff; }
-  .score-conf { font-size: 10.8px; color: #dcfce7; margin-top: 3px; }
+  .score-conf { font-size: 10.6px; color: #fee2e2; margin-top: 3px; }
 
-  .meta-table { width: 100%; font-size: 11.3px; margin-bottom: 11px; border-collapse: collapse; }
-  .meta-table td { padding: 5px 0; border-bottom: 1px solid #1e293b; }
-  .meta-table td:first-child { color: #94a3b8; width: 43%; }
+  .meta-table { width: 100%; font-size: 11.1px; margin-bottom: 10px; border-collapse: collapse; }
+  .meta-table td { padding: 4.5px 0; border-bottom: 1px solid #1e293b; vertical-align: top; }
+  .meta-table td:first-child { color: #94a3b8; width: 41%; padding-right: 6px; }
   .meta-table td:last-child { color: #f8fafc; font-weight: 600; text-align: right; }
 
   .xai-box {
     background: #1e293b; border: 1px solid #334155; border-radius: 8px;
-    padding: 10px; margin-bottom: 11px;
+    padding: 9px 10px; margin-bottom: 10px;
   }
-  .xai-row { margin-bottom: 7px; font-size: 11px; }
+  .xai-row { margin-bottom: 6px; font-size: 10.8px; }
   .xai-row:last-child { margin-bottom: 0; }
-  .xai-top { display: flex; justify-content: space-between; margin-bottom: 3px; }
+  .xai-top { display: flex; justify-content: space-between; margin-bottom: 3px; gap: 6px; }
   .bar-bg { height: 6px; background: #0f172a; border-radius: 4px; overflow: hidden; }
   .bar-fill { height: 100%; background: #22c55e; border-radius: 4px; transition: width 0.25s; }
 
   .explain-text {
-    font-size: 11.4px; line-height: 1.42; color: #e2e8f0;
+    font-size: 11.2px; line-height: 1.4; color: #e2e8f0;
     background: rgba(37, 99, 235, 0.15); border-left: 3px solid #3b82f6;
-    padding: 8px 10px; border-radius: 4px; margin-bottom: 11px;
+    padding: 8px 10px; border-radius: 4px; margin-bottom: 10px;
   }
-  .toast {
-    display: none; margin-bottom: 9px; padding: 8px 10px; border-radius: 6px;
-    background: #065f46; border: 1px solid #10b981; color: #ecfdf5; font-size: 11.5px; font-weight: 600;
+  .norm-note {
+    font-size: 10.4px; line-height: 1.35; color: #cbd5e1;
+    background: #172033; border: 1px solid #334155;
+    padding: 6px 9px; border-radius: 6px; margin-bottom: 10px;
   }
-  .btn-group { display: flex; flex-direction: column; gap: 7px; margin-top: auto; }
+  .btn-group { display: flex; flex-direction: column; gap: 6px; margin-top: auto; }
   .btn {
-    padding: 9px 12px; border-radius: 7px; border: none; font-size: 12px;
+    padding: 8.5px 12px; border-radius: 7px; border: none; font-size: 11.6px;
     font-weight: 700; cursor: pointer; text-align: center; transition: opacity 0.15s;
   }
   .btn:hover { opacity: 0.92; }
@@ -267,10 +192,39 @@
   .btn-primary { background: #2563eb; color: #fff; }
   .btn-outline { background: #1e293b; color: #cbd5e1; border: 1px solid #475569; }
 
-  @media (max-width: 1100px) {
+  /* Native modal dialog styling per modern-web-guidance */
+  dialog[open] {
+    margin: auto;
+    max-width: 640px;
+    width: calc(100% - 32px);
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1px solid #3b82f6;
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+  }
+  dialog:modal {
+    overscroll-behavior: contain;
+  }
+  dialog::backdrop {
+    background-color: rgba(2, 6, 23, 0.72);
+    backdrop-filter: blur(3px);
+    overflow: hidden;
+    overscroll-behavior: contain;
+  }
+  .dlg-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+  .dlg-head h2 { font-size: 15px; font-weight: 800; color: #93c5fd; }
+  .dlg-body { font-size: 12px; line-height: 1.5; color: #e2e8f0; background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 12px; margin-bottom: 14px; }
+  .dlg-body p { margin-bottom: 6px; }
+  .dlg-actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+  .leaflet-popup-content-wrapper { background: #0f172a; color: #f8fafc; border: 1px solid #3b82f6; border-radius: 8px; }
+  .leaflet-popup-tip { background: #0f172a; }
+
+  @media (max-width: 1120px) {
     .workspace { grid-template-columns: 1fr; }
-    .map-area { min-height: 390px; order: -1; }
-    .sat-scene { width: 95%; height: 300px; }
+    .map-area { min-height: 400px; order: -1; }
   }
 </style>
 </head>
@@ -280,30 +234,39 @@
   <div class="brand">
     <div class="logo-dot">РКС</div>
     <div>
-      <h1>ГИС «КосмоРевизор» · Инвентаризация, оценка и управление (КР → УК СЭЗ ППК «ФРТ» → вся РФ)</h1>
-      <span>Late Fusion: Модель А Оптика («Ресурс-П», «Канопус-В», Sentinel-2) + Модель Б Сиамский SAR («Кондор-ФКА» VV/VH)</span>
+      <h1>ГИС «КосмоРевизор» — Инвентаризация, оценка и управление <span class="team-pill">КОМАНДА 15</span></h1>
+      <span>Сергей Юпитер (ML) · Пётр Коротков (инженер) · Михаил Гулягин (инженер) &nbsp;|&nbsp; «Кондор-ФКА» («Всепогодный страж», 1–2 м, 12–14 ч) + «Ресурс-П» («Детализатор», 0,5–0,7 м)</span>
     </div>
   </div>
   <div class="kpi-bar">
-    <div class="kpi"><div class="val">9 200</div><div class="lbl">Ядро: объекты КР / ФРТ</div></div>
-    <div class="kpi red"><div class="val">580</div><div class="lbl">Утрачены (числятся в базе)</div></div>
-    <div class="kpi green"><div class="val">3 140</div><div class="lbl">Целые вне ЕГРН (в аренду)</div></div>
-    <div class="kpi amber"><div class="val">78 000</div><div class="lbl">Эшелон 1 РФ (150–400 млн ₽)</div></div>
-    <div class="kpi cyan"><div class="val">2 часа</div><div class="lbl">Модуль ЧС онлайн (Орск)</div></div>
+    <div class="kpi amber"><div class="val">≈ 1 086 087</div><div class="lbl">Сооружений (новые рег.)</div></div>
+    <div class="kpi red"><div class="val">60–100 тыс. ₽</div><div class="lbl">1 выезд (10–15 дней)</div></div>
+    <div class="kpi"><div class="val">9 200</div><div class="lbl">Ядро КР / УК ППК «ФРТ»</div></div>
+    <div class="kpi green"><div class="val">78 000</div><div class="lbl">Эшелон 1 РФ (гособъекты)</div></div>
+    <div class="kpi cyan"><div class="val">2 часа</div><div class="lbl">Режим ЧС онлайн (Орск)</div></div>
   </div>
 </header>
 
 <div class="workspace">
   <div class="panel-left">
-    <div class="panel-title">3 задачи: Инвентаризация · Оценка · Управление</div>
+    <div class="panel-title">Очередь приоритетов · Инвентаризация · Оценка · Управление</div>
     <div class="filter-row">
-      <div class="chip active" onclick="filterList('all', this)">Все контуры</div>
-      <div class="chip" onclick="filterList('sez', this)">🟢 Ядро: КР и ППК «ФРТ»</div>
-      <div class="chip" onclick="filterList('loss', this)">🔴 Утрачены / Разрушения</div>
-      <div class="chip" onclick="filterList('rf', this)">🟣 Эшелон 2 РФ + 🌊 ЧС</div>
+      <div class="chip active" onclick="filterList('all', this)">Все (7)</div>
+      <div class="chip" onclick="filterList('museum', this)">🏛 Музей (Кейс)</div>
+      <div class="chip" onclick="filterList('sez', this)">🟢 Ядро КР / ФРТ</div>
+      <div class="chip" onclick="filterList('loss', this)">🔴 Разрушения</div>
+      <div class="chip" onclick="filterList('rf', this)">🟣 РФ + 🌊 ЧС</div>
     </div>
 
-    <div class="obj-item selected" data-cat="sez" onclick="selectObj(0)">
+    <div class="obj-item selected" data-cat="museum" onclick="selectObj(0)">
+      <div class="obj-top">
+        <span class="obj-id">#ОКН-1916 · Краеведческий музей, Мариуполь</span>
+        <span class="badge b-red">Памятник · В восстановление</span>
+      </div>
+      <div class="obj-sub">Реальный кейс (ул. Георгиевская, 20, ~1 900 м²). В реестре «действующий» → «Кондор-ФКА» + «Ресурс-П» выявили обрушение → перевод в <strong>госпрограмму восстановления ОКН</strong> (не в СЭЗ).</div>
+    </div>
+
+    <div class="obj-item" data-cat="sez" onclick="selectObj(1)">
       <div class="obj-top">
         <span class="obj-id">#КР-29540 · Торговый центр (ТЦ)</span>
         <span class="badge b-green">В аренду без торгов</span>
@@ -311,7 +274,7 @@
       <div class="obj-sub">Инвентаризация: не учтён в ЕГРН. <strong>Целый ТЦ 4 800 м² + парковка</strong> → передача инвестору СЭЗ (Пост. № 1099).</div>
     </div>
 
-    <div class="obj-item" data-cat="loss" onclick="selectObj(1)">
+    <div class="obj-item" data-cat="loss" onclick="selectObj(2)">
       <div class="obj-top">
         <span class="obj-id">#КР-04812 · Корпус (Эшелон 1 · 78 000)</span>
         <span class="badge b-red">Риск 94 · Утрачено</span>
@@ -319,277 +282,363 @@
       <div class="obj-sub">По документам: здание 1 450 м² (идут затраты на ЖКХ и охрану). На снимке: <strong>снесено</strong> → экономия 150–400 млн ₽/год по РФ.</div>
     </div>
 
-    <div class="obj-item" data-cat="loss" onclick="selectObj(2)">
+    <div class="obj-item" data-cat="loss" onclick="selectObj(3)">
       <div class="obj-top">
-        <span class="obj-id">#СЭЗ-19044 · Логистический склад</span>
-        <span class="badge b-red">SAR 24/7 · За 48 ч</span>
+        <span class="obj-id">#СЭЗ-19044 · Склад (Облачность 100%)</span>
+        <span class="badge b-amber">Венн 76% → Выезд</span>
       </div>
-      <div class="obj-sub">Оценка разрушений: Сиамский SAR («Кондор-ФКА») сквозь 100% облачность выявил обрушение 65% крыши.</div>
+      <div class="obj-sub">«Всепогодный страж» («Кондор-ФКА») сквозь тучи выявил обрушение 65% крыши. Уверенность &lt; 80% → <strong>выезд инженера по 248-ФЗ</strong>.</div>
     </div>
 
-    <div class="obj-item" data-cat="sez" onclick="selectObj(3)">
+    <div class="obj-item" data-cat="sez" onclick="selectObj(4)">
       <div class="obj-top">
         <span class="obj-id">#ФРТ-11209 · Гостиница (резидент СЭЗ)</span>
-        <span class="badge b-amber">Управление КПЭ: 72%</span>
+        <span class="badge b-green">Контроль КПЭ: 72%</span>
       </div>
       <div class="obj-sub">После передачи (УК ППК «ФРТ»): инвестор обновил 72% кровли, работает спецтехника → КПЭ льготы 0% подтверждён.</div>
     </div>
 
-    <div class="obj-item" data-cat="rf" onclick="selectObj(4)">
+    <div class="obj-item" data-cat="rf" onclick="selectObj(5)">
       <div class="obj-top">
         <span class="obj-id">#РФ-294ФЗ · Регион + Муниципалитет</span>
         <span class="badge b-purple">НК РФ + Борщевик ×5</span>
       </div>
-      <div class="obj-sub">Эшелон 2 РФ: неоформленный склад (гл. 30 НК → 100% региону) + борщевик (294-ФЗ: налог ×5 и штраф до 700 тыс. ₽).</div>
+      <div class="obj-sub">Эшелон 2 РФ: коммерческий склад вне ЕГРН (гл. 30 НК → 100% региону) + борщевик (294-ФЗ: налог ×5 и штраф до 700 тыс. ₽).</div>
     </div>
 
-    <div class="obj-item" data-cat="rf" onclick="selectObj(5)">
+    <div class="obj-item" data-cat="rf" onclick="selectObj(6)">
       <div class="obj-top">
-        <span class="obj-id">#РФ-ОРСК · Модуль ЧС онлайн</span>
+        <span class="obj-id">#РФ-ОРСК · Модуль ЧС онлайн (паводок)</span>
         <span class="badge b-blue">Ущерб за 2 ч</span>
       </div>
-      <div class="obj-sub">Прорыв дамбы / паводок: радар «Кондор-ФКА» сквозь тучи выделил 248 затопленных зданий для МЧС и ППК «ФРТ».</div>
+      <div class="obj-sub">Прорыв дамбы в Орске: радар «Кондор-ФКА» сквозь тучи выделил контур затопления по ЕГРН для МЧС, Минстроя и ППК «ФРТ».</div>
     </div>
   </div>
 
   <div class="map-area">
-    <div class="grid-overlay"></div>
     <div class="map-toolbar">
-      <span class="layer-pill on" onclick="this.classList.toggle('on')">Модель А: Оптика (Mask R-CNN / YOLO)</span>
-      <span class="layer-pill on" onclick="this.classList.toggle('on')">Модель Б: Сиамский SAR (VV/VH)</span>
-      <span class="layer-pill on" onclick="this.classList.toggle('on')">Late Fusion (алгоритм Венна)</span>
-      <span class="layer-pill on" onclick="this.classList.toggle('on')">Sentinel-2 (мультиспектр) + ЕГРН</span>
+      <span class="layer-pill on" id="btn-sar" onclick="toggleLayerPill(this)">🛰 «Кондор-ФКА» (Всепогодный страж, 1–2 м, 12–14 ч)</span>
+      <span class="layer-pill on" id="btn-opt" onclick="toggleLayerPill(this)">🔭 «Ресурс-П» (Детализатор, 0,5–0,7 м)</span>
+      <span class="layer-pill on" id="btn-egrn" onclick="toggleCadastre(this)">📐 Контур реестра / ЕГРН</span>
+      <span class="layer-pill on" onclick="resetCurrentView()">🎯 Центрировать объект</span>
     </div>
 
-    <div class="sat-scene">
-      <div class="road-h"></div>
-      <div class="road-v"></div>
+    <div id="sat-map"></div>
 
-      <div id="poly-0" class="poly-box poly-unreg active-poly" onclick="selectObj(0)">
-        <div class="poly-label">🟢 #КР-29540 · ТЦ 4 800 м² ВНЕ ЕГРН</div>
-        <div class="roof">Целый ТЦ + парковка 120 авто<br>(передача инвестору СЭЗ)</div>
-      </div>
-
-      <div id="poly-1" class="poly-box poly-lost" onclick="selectObj(1)">
-        <div class="poly-label">🔴 #КР-04812 · ЗДАНИЕ УТРАЧЕНО (0 м²)</div>
-        <div class="ghost-box">Числится по документам (фактически снесено)</div>
-      </div>
-
-      <div id="poly-2" class="poly-box poly-rt" onclick="selectObj(2)">
-        <div class="poly-label">⚡ #СЭЗ-19044 · СИАМСКИЙ SAR (48 ч)</div>
-        <div class="rt-inner">Радар Кондор-ФКА:<br>обрушение 65% крыши склада</div>
-      </div>
-
-      <div id="poly-3" class="poly-box poly-kpi" onclick="selectObj(3)">
-        <div class="poly-label">🟡 #ФРТ-11209 · КОНТРОЛЬ КПЭ РЕМОНТА</div>
-        <div class="roof-kpi">Гостиница СЭЗ: 72% новой кровли</div>
-      </div>
-
-      <div id="poly-4" class="poly-box poly-rf2" onclick="selectObj(4)">
-        <div class="poly-label">🟣 #РФ-294ФЗ · Самовольный склад + Борщевик</div>
-        <div style="font-size:10.5px;font-weight:700;color:#f3e8ff;text-align:center;padding-top:10px;">Налог ×5 (гл. 31 НК) + штраф до 700 тыс. ₽</div>
-      </div>
-
-      <div id="poly-5" class="poly-box poly-flood" onclick="selectObj(5)">
-        <div class="poly-label">🌊 #РФ-ОРСК · Зона затопления (248 зданий)</div>
-        <div style="font-size:10.5px;font-weight:700;color:#e0f2fe;text-align:center;padding-top:10px;">Онлайн-расчёт ущерба паводка за 2 часа</div>
-      </div>
+    <div class="map-overlay-card" id="map-caption">
+      <strong>Спутниковая сверка (47.0928° N, 37.5575° E):</strong> Краеведческий музей, г. Мариуполь, ул. Георгиевская, 20. Пунктир — контур реестра (~1 900 м², «действующий музей»); заливка — фиксация разрушения кровли (март 2022) и контроль восстановления (с марта 2024).
     </div>
 
     <div class="map-legend">
-      <span>🟢 <b>Инвентаризация вне ЕГРН</b></span>
-      <span>🔴 <b>Утрачено / Разрушение</b></span>
-      <span>🟡 <b>Управление КПЭ СЭЗ</b></span>
-      <span>🟣 <b>Эшелон 2 РФ (НК + 294-ФЗ)</b></span>
-      <span>🌊 <b>Модуль ЧС</b></span>
+      <span><b>Индекс риска (0–100)</b> = 40%·Площадь + 35%·Кровля (Оптика+SAR) + 15%·Активность + 10%·Зарастание</span>
+      <span><b>Late Fusion:</b> IoU = 0.814 · F2 = 0.958 &nbsp;|&nbsp; <b>Венн &lt; 80%</b> → выезд по 248-ФЗ</span>
     </div>
   </div>
 
   <div class="panel-right">
-    <div class="panel-title">Паспорт объекта · Инвентаризация, Оценка, Управление</div>
+    <div class="panel-title">Карточка объекта · Объяснимость (XAI) и решение</div>
 
     <div class="score-box" id="score-box">
       <div>
-        <div class="score-lbl" id="o-title">#КР-29540 · Торговый центр (ТЦ)</div>
-        <div class="score-conf" id="o-sub">ДО ПЕРЕДАЧИ: СОХРАННЫЙ ОБЪЕКТ ВНЕ ЕГРН · Венн: 96%</div>
+        <div class="score-lbl" id="o-title">#ОКН-1916 · Краеведческий музей, Мариуполь</div>
+        <div class="score-conf" id="o-sub">ПАМЯТНИК КУЛЬТУРЫ · РАЗРУШЕНО · Уверенность Венна: 95%</div>
       </div>
-      <div class="score-num" id="o-score">96</div>
+      <div>
+        <div class="score-num" id="o-score">92</div>
+        <div style="font-size:9.5px;color:#fecaca;text-align:right;" id="o-score-cap">Индекс риска</div>
+      </div>
     </div>
 
     <table class="meta-table">
-      <tr><td>Заказчик (Плательщик)</td><td id="m-loc">Корпорация развития → УК ППК «ФРТ»</td></tr>
-      <tr><td>Статус в ЕГРН / Реестре</td><td id="m-bal">Правообладатель не оформлен</td></tr>
-      <tr><td>Модель А (Оптика)</td><td id="m-ai" style="color:#4ade80;">ТЦ 4 800 м², крыша цела, парковка 120 мест</td></tr>
-      <tr><td>Модель Б (Сиамский SAR)</td><td id="m-dates">Кондор-ФКА (VV/VH): жёсткий контур стабилен</td></tr>
-      <tr><td>Управленческий эффект</td><td id="m-cost" style="color:#4ade80;">Аренда без торгов (Пост. № 1099 / СЭЗ)</td></tr>
+      <tr><td>Заказчик / Контур</td><td id="m-loc">Регион / Минкультуры / КР (Новые территории)</td></tr>
+      <tr><td>Статус по документам</td><td id="m-bal">«Действующий музей», 1916 г., 3 эт., ~1 900 м²</td></tr>
+      <tr><td>«Кондор-ФКА» (SAR 24/7)</td><td id="m-dates" style="color:#f87171;">Потеря жёсткой конструкции крыши (спад VV/VH)</td></tr>
+      <tr><td>«Ресурс-П» (Детализатор)</td><td id="m-ai" style="color:#fca5a5;">Памятник архитектуры (обрушение кровли и перекрытий)</td></tr>
+      <tr><td>Юридическое решение</td><td id="m-cost" style="color:#fbbf24;">В госпрограмму восстановления ОКН (не в аренду СЭЗ)</td></tr>
     </table>
 
     <div class="xai-box">
-      <div class="panel-title" style="margin-bottom:7px;">Вклад ветвей ансамбля Late Fusion</div>
+      <div class="panel-title" style="margin-bottom:6px;">Вклад признаков ансамбля Late Fusion (XAI)</div>
       <div class="xai-row">
-        <div class="xai-top"><span id="f1-n">Модель А (Mask R-CNN): целая кровля 4 800 м²</span><strong id="f1-v" style="color:#4ade80;">94%</strong></div>
-        <div class="bar-bg"><div class="bar-fill" id="f1-b" style="width:94%; background:#22c55e;"></div></div>
+        <div class="xai-top"><span id="f1-n">Модель Б («Кондор-ФКА» SAR): обрушение кровли</span><strong id="f1-v" style="color:#f87171;">96%</strong></div>
+        <div class="bar-bg"><div class="bar-fill" id="f1-b" style="width:96%; background:#ef4444;"></div></div>
       </div>
       <div class="xai-row">
-        <div class="xai-top"><span id="f2-n">Модель Б (Сиамский SAR): нет деформаций</span><strong id="f2-v" style="color:#38bdf8;">97%</strong></div>
-        <div class="bar-bg"><div class="bar-fill" id="f2-b" style="width:97%; background:#38bdf8;"></div></div>
+        <div class="xai-top"><span id="f2-n">Модель А («Ресурс-П»): тип «памятник культуры», не склад</span><strong id="f2-v" style="color:#38bdf8;">94%</strong></div>
+        <div class="bar-bg"><div class="bar-fill" id="f2-b" style="width:94%; background:#38bdf8;"></div></div>
       </div>
       <div class="xai-row">
-        <div class="xai-top"><span id="f3-n">Модель А (YOLO): подъезд и парковка ТЦ целы</span><strong id="f3-v" style="color:#4ade80;">91%</strong></div>
-        <div class="bar-bg"><div class="bar-fill" id="f3-b" style="width:91%; background:#22c55e;"></div></div>
+        <div class="xai-top"><span id="f3-n">Мониторинг с 03.2024: старт работ по восстановлению</span><strong id="f3-v" style="color:#fbbf24;">91%</strong></div>
+        <div class="bar-bg"><div class="bar-fill" id="f3-b" style="width:91%; background:#f59e0b;"></div></div>
       </div>
     </div>
 
     <div class="explain-text" id="o-exp">
-      <strong>Управление до передачи инвестору:</strong> Позднее объединение (Late Fusion) подтвердило сохранное здание торгового центра (4 800 м²) с парковкой без оформленного собственника в ЕГРН. Оформляется в госсобственность для передачи участнику СЭЗ через <strong>Корпорацию развития и ППК «ФРТ» в аренду без торгов</strong>.
+      <strong>Реальный кейс (без системы vs с «КосмоРевизором»):</strong> Здание 1916 г. (фонд 50 000+ экспонатов) пострадало в марте 2022 г., но в реестрах продолжало числиться действующим. Вместо ручного выезда комиссии (60–100 тыс. ₽ и 10–15 дней) радар <strong>«Кондор-ФКА»</strong> («Всепогодный страж») фиксирует потерю крыши, а оптика <strong>«Ресурс-П»</strong> («Детализатор») и сверка с реестром определяют статус памятника культуры: объект <strong>не передаётся инвестору СЭЗ под коммерцию</strong>, а направляется в госпрограмму восстановления (начата в марте 2024 г.) с дистанционным контролем работ.
     </div>
 
-    <div class="toast" id="toast-msg"></div>
+    <div class="norm-note" id="o-norm">
+      ⚖️ <strong>Нормативная процедура (248-ФЗ):</strong> спутниковый отчёт служит предпроверочным индикатором риска — отсекает 90% достоверных объектов и направляет выездную комиссию только в 10% спорных случаев (при уверенности Венна &lt; 80%).
+    </div>
 
     <div class="btn-group">
-      <button class="btn btn-success" id="btn-main" onclick="triggerAction('main')">🏛 Включить в реестр площадок КР и УК СЭЗ (ППК «ФРТ»)</button>
-      <button class="btn btn-primary" onclick="triggerAction('field')">📍 Направить инженера на контрольный осмотр</button>
-      <button class="btn btn-outline" onclick="triggerAction('export')">⬇ Выгрузить паспорт PDF и координаты для ЕГРН</button>
+      <button type="button" class="btn btn-danger" id="btn-main" onclick="openActModal('main')">🏛 Сформировать карточку для госпрограммы восстановления ОКН</button>
+      <button type="button" class="btn btn-primary" onclick="openActModal('field')">📍 Маршрутный лист выездного инженера (по 248-ФЗ)</button>
+      <button type="button" class="btn btn-outline" onclick="openActModal('export')">⬇ Выгрузить цифровой паспорт PDF и GeoJSON для ГИС</button>
     </div>
   </div>
 </div>
 
+<!-- Native modal dialog per modern-web-guidance (no role/aria-modal, closedby="any" + Safari fallback) -->
+<dialog id="act-dialog" closedby="any" aria-labelledby="act-title">
+  <div class="dlg-head">
+    <h2 id="act-title">Цифровой паспорт предпроверочного скрининга ДЗЗ</h2>
+  </div>
+  <div class="dlg-body" id="act-body"></div>
+  <form method="dialog" class="dlg-actions">
+    <button type="button" class="btn btn-primary" onclick="window.print()">🖨 Печать / PDF</button>
+    <button type="submit" value="close" class="btn btn-outline" autofocus>Закрыть</button>
+  </form>
+</dialog>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
 const objects = [
   {
-    title: "#КР-29540 · Торговый центр (ТЦ)",
-    sub: "ДО ПЕРЕДАЧИ: СОХРАННЫЙ ОБЪЕКТ ВНЕ ЕГРН · Венн: 96%",
-    score: "96",
-    bg: "linear-gradient(135deg, #14532d, #166534)", border: "#22c55e",
-    loc: "Корпорация развития → УК ППК «ФРТ»",
-    bal: "Правообладатель не оформлен",
-    ai: "ТЦ 4 800 м², крыша цела, парковка 120 мест", aiColor: "#4ade80",
-    dates: "Кондор-ФКА (VV/VH): жёсткий контур стабилен",
-    cost: "Аренда без торгов (Пост. № 1099 / СЭЗ)", costColor: "#4ade80",
+    id: "ОКН-1916",
+    title: "#ОКН-1916 · Краеведческий музей, Мариуполь",
+    sub: "ПАМЯТНИК КУЛЬТУРЫ · РАЗРУШЕНО · Уверенность Венна: 95%",
+    score: "92", scoreCap: "Индекс риска",
+    coords: [47.0928, 37.5575], zoom: 17,
+    polyEgrn: [[47.09315, 37.55695], [47.09315, 37.55805], [47.09248, 37.55805], [47.09248, 37.55695]],
+    polyFact: [[47.09308, 37.55705], [47.09308, 37.55795], [47.09255, 37.55795], [47.09255, 37.55705]],
+    polyColor: "#ef4444",
+    caption: "<strong>Спутниковая сверка (47.0928° N, 37.5575° E):</strong> Краеведческий музей, г. Мариуполь, ул. Георгиевская, 20 (~1 900 м², 1916 г.). Пунктир — контур реестра; красная зона — обрушение кровли (март 2022), с марта 2024 г. — контроль восстановления.",
+    bg: "linear-gradient(135deg, #450a0a, #7f1d1d)", border: "#ef4444",
+    loc: "Регион / Минкультуры / КР (Новые территории)",
+    bal: "«Действующий музей», 1916 г., 3 эт., ~1 900 м²",
+    dates: "Потеря жёсткой конструкции крыши (спад VV/VH)", datesColor: "#f87171",
+    ai: "Памятник архитектуры (обрушение кровли и перекрытий)", aiColor: "#fca5a5",
+    cost: "В госпрограмму восстановления ОКН (не в аренду СЭЗ)", costColor: "#fbbf24",
     factors: [
-      ["Модель А (Mask R-CNN): целая кровля 4 800 м²", "94%", "94%", "#22c55e"],
-      ["Модель Б (Сиамский SAR): нет деформаций", "97%", "97%", "#38bdf8"],
-      ["Модель А (YOLO): подъезд и парковка ТЦ целы", "91%", "91%", "#22c55e"]
+      ["Модель Б («Кондор-ФКА» SAR): обрушение кровли", "96%", "96%", "#ef4444"],
+      ["Модель А («Ресурс-П»): тип «памятник культуры», не склад", "94%", "94%", "#38bdf8"],
+      ["Мониторинг с 03.2024: старт работ по восстановлению", "91%", "91%", "#f59e0b"]
     ],
-    exp: "<strong>Управление до передачи инвестору:</strong> Позднее объединение (Late Fusion) подтвердило сохранное здание торгового центра (4 800 м²) с парковкой без оформленного собственника в ЕГРН. Оформляется в госсобственность для передачи участнику СЭЗ через <strong>Корпорацию развития и ППК «ФРТ» в аренду без торгов</strong>.",
+    exp: "<strong>Реальный кейс (без системы vs с «КосмоРевизором»):</strong> Здание 1916 г. (фонд 50 000+ экспонатов) пострадало в марте 2022 г., но в реестрах продолжало числиться действующим. Вместо ручного выезда комиссии (60–100 тыс. ₽ и 10–15 дней) радар <strong>«Кондор-ФКА»</strong> («Всепогодный страж») фиксирует потерю крыши, а оптика <strong>«Ресурс-П»</strong> («Детализатор») и сверка с реестром определяют статус памятника культуры: объект <strong>не передаётся инвестору СЭЗ под коммерцию</strong>, а направляется в госпрограмму восстановления (начата в марте 2024 г.) с дистанционным контролем работ.",
+    btnText: "🏛 Сформировать карточку для госпрограммы восстановления ОКН", btnClass: "btn btn-danger"
+  },
+  {
+    id: "КР-29540",
+    title: "#КР-29540 · Торговый центр (ТЦ)",
+    sub: "ДО ПЕРЕДАЧИ: ЦЕЛЫЙ ОБЪЕКТ ВНЕ ЕГРН · Уверенность Венна: 96%",
+    score: "6", scoreCap: "Индекс риска",
+    coords: [47.1185, 37.5290], zoom: 17,
+    polyEgrn: [[47.1189, 37.5282], [47.1189, 37.5298], [47.1181, 37.5298], [47.1181, 37.5282]],
+    polyFact: [[47.11885, 37.5283], [47.11885, 37.5297], [47.11815, 37.5297], [47.11815, 37.5283]],
+    polyColor: "#22c55e",
+    caption: "<strong>Инвентаризация вне ЕГРН (47.1185° N, 37.5290° E):</strong> Целый торговый центр 4 800 м² с парковкой на 120 машино-мест. Правообладатель не оформлен → включение в реестр площадок КР и УК СЭЗ ППК «ФРТ».",
+    bg: "linear-gradient(135deg, #14532d, #166534)", border: "#22c55e",
+    loc: "Корпорация развития → УК СЭЗ ППК «ФРТ»",
+    bal: "Правообладатель в ЕГРН не оформлен",
+    dates: "Жёсткий уголковый отклик (double-bounce стабилен)", datesColor: "#4ade80",
+    ai: "ТЦ 4 800 м², кровля цела, парковка 120 мест", aiColor: "#4ade80",
+    cost: "Аренда без торгов резиденту СЭЗ (Пост. № 1099)", costColor: "#4ade80",
+    factors: [
+      ["Модель А («Ресурс-П» Mask R-CNN): целая кровля 4 800 м²", "94%", "94%", "#22c55e"],
+      ["Модель Б («Кондор-ФКА» SAR): деформаций нет", "97%", "97%", "#38bdf8"],
+      ["Модель А (YOLOv8): подъездные пути и парковка целы", "91%", "91%", "#22c55e"]
+    ],
+    exp: "<strong>Управление до передачи инвестору:</strong> Позднее объединение (Late Fusion) выявило сохранное коммерческое здание (4 800 м²) с парковкой без записи в ЕГРН. Оформляется в госсобственность и передаётся участнику СЭЗ через <strong>Корпорацию развития и ППК «ФРТ» в аренду без торгов</strong>.",
     btnText: "🏛 Включить в реестр площадок КР и УК СЭЗ (ППК «ФРТ»)", btnClass: "btn btn-success"
   },
   {
+    id: "КР-04812",
     title: "#КР-04812 · Производственный корпус",
-    sub: "ЭШЕЛОН 1 (78 000 ПО РФ): ЗДАНИЕ УТРАЧЕНО · Венн: 94%",
-    score: "94",
+    sub: "ЭШЕЛОН 1 (78 000 ПО РФ): ЗДАНИЕ УТРАЧЕНО · Уверенность Венна: 94%",
+    score: "95", scoreCap: "Индекс риска",
+    coords: [48.0230, 37.8020], zoom: 17,
+    polyEgrn: [[48.02335, 37.8014], [48.02335, 37.8026], [48.02265, 37.8026], [48.02265, 37.8014]],
+    polyFact: [[48.02305, 37.8019], [48.02305, 37.8021], [48.02295, 37.8021], [48.02295, 37.8019]],
+    polyColor: "#ef4444",
+    caption: "<strong>Эшелон 1 Госактивы (78 000 объектов по РФ):</strong> По документам числится производственный корпус 1 450 м² с расходами на охрану и ЖКХ; фактически на участке пустырь (0 м²).",
     bg: "linear-gradient(135deg, #450a0a, #7f1d1d)", border: "#ef4444",
-    loc: "ВЭБ.РФ / ДОМ.РФ / Росимущество / КР",
-    bal: "По документам: корпус 1 450 м² (охрана и ЖКХ)",
-    ai: "0 м² — здание снесено (пустырь)", aiColor: "#f87171",
-    dates: "Сиамский SAR: потеря жёсткой конструкции",
-    cost: "1,86 млн ₽/год (по РФ: 150–400 млн ₽/год)", costColor: "#f87171",
+    loc: "ВЭБ.РФ / ДОМ.РФ / Росимущество / КР регионов",
+    bal: "По документам: корпус 1 450 м² (списываются ЖКХ и охрана)",
+    dates: "Полное отсутствие уголкового отражения стен и крыши", datesColor: "#f87171",
+    ai: "0 м² — здание снесено (свободный участок)", aiColor: "#f87171",
+    cost: "Экономия 150–400 млн ₽/год при тиражировании на 78 000 ед.", costColor: "#f87171",
     factors: [
-      ["Модель А (Mask R-CNN): отсутствие здания в контуре", "95%", "95%", "#ef4444"],
-      ["Модель Б (Сиамский SAR): падение отклика VV/VH", "93%", "93%", "#f97316"],
-      ["Сокращение выездов инспекторов (10–15 раз)", "92%", "92%", "#eab308"]
+      ["Модель А («Ресурс-П»): отсутствие здания в контуре ЕГРН", "95%", "95%", "#ef4444"],
+      ["Модель Б («Кондор-ФКА» SAR): фоновое рассеяние грунта", "93%", "93%", "#f97316"],
+      ["Сокращение холостых выездов инспекторов (в 12 раз)", "92%", "92%", "#eab308"]
     ],
-    exp: "<strong>Экономия операционных расходов (Эшелон 1):</strong> Из 78 000 гособъектов по РФ даже 1–2% разрушенных или снесённых строений экономят <strong>150–400 млн ₽ в год</strong> за счёт прекращения списаний на отопление и охрану, а свободный участок передаётся на торги.",
-    btnText: "⛔ Прекратить расходы на содержание и передать землю на торги", btnClass: "btn btn-danger"
+    exp: "<strong>Экономия операционных расходов бюджета (Эшелон 1):</strong> Из 78 000 гособъектов по РФ отсев даже 1–2% физически утраченных строений экономит <strong>150–400 млн ₽ в год</strong> на охране и содержании, а свободный земельный участок вовлекается в оборот на торгах.",
+    btnText: "⛔ Прекратить расходы на содержание и передать участок на торги", btnClass: "btn btn-danger"
   },
   {
+    id: "СЭЗ-19044",
     title: "#СЭЗ-19044 · Логистический склад",
-    sub: "ОЦЕНКА РАЗРУШЕНИЙ 24/7 СКВОЗЬ ОБЛАКА · Венн: 91%",
-    score: "65%",
-    bg: "linear-gradient(135deg, #4c0519, #9f1239)", border: "#f43f5e",
-    loc: "Логистический узел · УК СЭЗ ППК «ФРТ»",
-    bal: "Склад 2 800 м² в государственном управлении",
-    ai: "Сплошная облачность 100% (оптика ждёт окна)", aiColor: "#fda4af",
-    dates: "Сиамский SAR (10.11 → 12.11): обрушение 65%",
-    cost: "Всепогодное обновление статуса за 3 часа", costColor: "#fda4af",
-    factors: [
-      ["Модель Б (Сиамский SAR): скачок изменений T_t−1 → T_t", "92%", "92%", "#f43f5e"],
-      ["Поляризация VV/VH: обрушение металлической крыши", "89%", "89%", "#ef4444"],
-      ["Вес Модели Б при облачности 100% (Late Fusion)", "100%", "100%", "#38bdf8"]
-    ],
-    exp: "<strong>Сила Late Fusion:</strong> Без попиксельной склейки с оптикой (нет ошибки Co-registration) сиамская радарная Модель Б («Кондор-ФКА») сквозь тучи определила степень разрушения крыши склада (65%).",
-    btnText: "⚡ Зафиксировать степень разрушения 65% в реестре ФРТ", btnClass: "btn btn-danger"
-  },
-  {
-    title: "#ФРТ-11209 · Гостиничный комплекс (СЭЗ)",
-    sub: "УПРАВЛЕНИЕ ПОСЛЕ ПЕРЕДАЧИ: КОНТРОЛЬ КПЭ · Венн: 93%",
-    score: "72%",
+    sub: "ОБЛАКА 100% · ВЕНН 76% (< 80%) → ВЫЕЗД ИНЖЕНЕРА ПО 248-ФЗ",
+    score: "68", scoreCap: "Индекс риска",
+    coords: [47.1420, 37.6110], zoom: 17,
+    polyEgrn: [[47.1424, 37.6102], [47.1424, 37.6118], [47.1416, 37.6118], [47.1416, 37.6102]],
+    polyFact: [[47.14235, 37.61025], [47.14235, 37.61105], [47.14165, 37.61105], [47.14165, 37.61025]],
+    polyColor: "#f59e0b",
+    caption: "<strong>Всепогодный режим 24/7 (Облачность 100%):</strong> Оптический канал закрыт тучами. Сиамский радар «Кондор-ФКА» зафиксировал обрушение 65% кровли; уверенность 76% (< 80%) автоматически формирует задание выездному инженеру.",
     bg: "linear-gradient(135deg, #451a03, #78350f)", border: "#f59e0b",
-    loc: "УК СЭЗ ППК «Фонд развития территорий»",
-    bal: "Договор СЭЗ (льгота 0% налог на прибыль)",
-    ai: "Уложено 72% новой кровли, 14 ед. спецтехники", aiColor: "#fde68a",
-    dates: "Сиамский SAR: новая жёсткая конструкция крыши",
-    cost: "Подтверждение КПЭ инвестора без выезда", costColor: "#4ade80",
+    loc: "Логистический узел · УК СЭЗ ППК «ФРТ»",
+    bal: "Склад 2 800 м² в оперативном управлении",
+    dates: "Сиамский SAR (повтор 12–14 ч): обрушение 65% крыши", datesColor: "#fbbf24",
+    ai: "Облачность 100% — вес оптической Модели А = 0.00", aiColor: "#fde68a",
+    cost: "Автоматический вызов инженера по 248-ФЗ (Венн 76% < 80%)", costColor: "#fbbf24",
     factors: [
-      ["Модель А (Mask R-CNN): прирост новой кровли +72%", "94%", "72%", "#22c55e"],
-      ["Модель Б (Сиамский SAR): рост отражения крыши", "91%", "91%", "#38bdf8"],
-      ["Модель А (YOLO): строительная техника активна", "90%", "90%", "#f59e0b"]
+      ["Модель Б («Кондор-ФКА» VV/VH): скачок изменений T_t−1 → T_t", "89%", "89%", "#f59e0b"],
+      ["Вес всепогодной радарной ветви при облаках 100%", "100%", "100%", "#38bdf8"],
+      ["Калибровка Венна (76% < порога 80% → проверка человеком)", "76%", "76%", "#ef4444"]
     ],
-    exp: "<strong>Управление после сдачи в аренду:</strong> Резидент СЭЗ обязан выполнить капремонт гостиницы. Платформа дистанционно подтверждает куратору ППК «ФРТ» соблюдение графика работ без выездных проверок.",
-    btnText: "✅ Подтвердить выполнение этапа КПЭ в ППК «ФРТ»", btnClass: "btn btn-success"
+    exp: "<strong>Механизм проверки человеком (п. 6.3 ТЗ):</strong> Когда съёмка идёт сквозь сплошную облачность только по радару и калиброванная уверенность Венна составляет <strong>76% (ниже порога 80%)</strong>, система не принимает решение вслепую, а ставит объект в приоритетный маршрутный лист выездного инженера.",
+    btnText: "📍 Направить выездного инженера на инструментальный осмотр", btnClass: "btn btn-primary"
   },
   {
+    id: "ФРТ-11209",
+    title: "#ФРТ-11209 · Гостиничный комплекс (СЭЗ)",
+    sub: "ПОСЛЕ ПЕРЕДАЧИ: КОНТРОЛЬ КПЭ РЕЗИДЕНТА · Уверенность Венна: 93%",
+    score: "18", scoreCap: "Индекс риска",
+    coords: [47.0885, 37.5410], zoom: 17,
+    polyEgrn: [[47.08885, 37.5404], [47.08885, 37.5416], [47.08815, 37.5416], [47.08815, 37.5404]],
+    polyFact: [[47.08885, 37.5404], [47.08885, 37.5416], [47.08815, 37.5416], [47.08815, 37.5404]],
+    polyColor: "#22c55e",
+    caption: "<strong>Контроль КПЭ инвестиционного договора СЭЗ:</strong> Уложено 72% новой кровли коммерческого гостиничного комплекса, зафиксирована работа строительной техники без выезда комиссии.",
+    bg: "linear-gradient(135deg, #14532d, #166534)", border: "#22c55e",
+    loc: "УК СЭЗ ППК «Фонд развития территорий»",
+    bal: "Инвестдоговор резидента СЭЗ (льгота 0% налог на прибыль)",
+    dates: "Рост отражения от новой жёсткой конструкции крыши", datesColor: "#4ade80",
+    ai: "Обновлено 72% кровли, на площадке 14 ед. техники", aiColor: "#4ade80",
+    cost: "Дистанционное подтверждение КПЭ (экономия 60–100 тыс. ₽)", costColor: "#4ade80",
+    factors: [
+      ["Модель А («Ресурс-П»): прирост новой кровли +72%", "94%", "72%", "#22c55e"],
+      ["Модель Б («Кондор-ФКА» SAR): восстановление контура", "91%", "91%", "#38bdf8"],
+      ["Модель А (YOLOv8): строительная техника активна", "90%", "90%", "#22c55e"]
+    ],
+    exp: "<strong>Управление после передачи коммерческого объекта:</strong> Резидент СЭЗ выполняет капитальный ремонт коммерческой гостиницы. Платформа ежеквартально подтверждает куратору ППК «ФРТ» выполнение графика инвестиционного договора без выездных проверок.",
+    btnText: "✅ Подтвердить выполнение этапа КПЭ резидента в ППК «ФРТ»", btnClass: "btn btn-success"
+  },
+  {
+    id: "РФ-294ФЗ",
     title: "#РФ-294ФЗ · Регион + Муниципалитет",
     sub: "ЭШЕЛОН 2 РФ: САМОВОЛЬНЫЙ СКЛАД + БОРЩЕВИК · Венн: 95%",
-    score: "×5",
+    score: "88", scoreCap: "Индекс риска",
+    coords: [55.4310, 37.5450], zoom: 16,
+    polyEgrn: [[55.4318, 37.5435], [55.4318, 37.5465], [55.4302, 37.5465], [55.4302, 37.5435]],
+    polyFact: [[55.4314, 37.5442], [55.4314, 37.5456], [55.4307, 37.5456], [55.4307, 37.5442]],
+    polyColor: "#a855f7",
+    caption: "<strong>Эшелон 2 Масштабирования на РФ:</strong> На сельхозучастке выявлен неучтённый коммерческий ангар 2 100 м² (гл. 30 НК РФ → региону) и очаг борщевика Сосновского 4,2 га (294-ФЗ → налог ×5).",
     bg: "linear-gradient(135deg, #3b0764, #6b21a8)", border: "#a855f7",
-    loc: "Плательщик: Правительство субъекта РФ",
+    loc: "Плательщик: Правительство субъекта РФ (единая ГИС)",
     bal: "Участок сельхозназначения без построек в ЕГРН",
-    ai: "Неучтённый ангар 2 100 м² + очаг борщевика 4,2 га", aiColor: "#e9d5ff",
-    dates: "Sentinel-2 (мультиспектр) + уточнение Канопус-В",
-    cost: "Налог гл. 30 НК (региону) + земля ×5 и штраф 700 тыс. ₽", costColor: "#4ade80",
+    dates: "Sentinel-2 (мультиспектр 10 м) + «Канопус-В» (2 м)", datesColor: "#e9d5ff",
+    ai: "Неучтённый ангар 2 100 м² + борщевик Сосновского 4,2 га", aiColor: "#e9d5ff",
+    cost: "Налог гл. 30 НК (100% региону) + земля ×5 и штраф 700 тыс. ₽", costColor: "#4ade80",
     factors: [
-      ["Канопус-В (0,7 м): коммерческий ангар вне ЕГРН", "96%", "96%", "#a855f7"],
-      ["Sentinel-2 (июнь–июль): спектр цветения борщевика", "93%", "93%", "#22c55e"],
-      ["Доходы региона и снижение дотаций районам", "100%", "100%", "#38bdf8"]
+      ["Оптика ВР: коммерческий ангар вне ЕГРН (гл. 30 НК РФ)", "96%", "96%", "#a855f7"],
+      ["Sentinel-2 (июнь–июль): спектр цветения борщевика (294-ФЗ)", "93%", "93%", "#22c55e"],
+      ["Самоокупаемость ГИС: доходы региона и районов (ст. 46 БК)", "100%", "100%", "#38bdf8"]
     ],
-    exp: "<strong>Эшелон 2 (Плательщик — Субъект РФ, рабочие места — региону и районам):</strong> Налог на коммерческий ангар (гл. 30 НК РФ) на 100% идёт в бюджет региона, а рост земельного налога с 0,3% до 1,5% по 294-ФЗ (гл. 31 НК РФ) и штрафы до 700 тыс. ₽ (ст. 46 БК РФ) пополняют местный и региональный бюджеты.",
-    btnText: "📑 Передать акт в Минимущество региона и земконтроль района", btnClass: "btn btn-primary"
+    exp: "<strong>Кому продавать в регионах РФ (Эшелон 2):</strong> Субъект РФ закупает единую ГИС для региона и районов. Налог на коммерческий самострой (<strong>гл. 30 НК РФ</strong>) на 100% идёт в бюджет региона, а повышение земельного налога с 0,3% до 1,5% (<strong>×5 по 294-ФЗ, гл. 31 НК РФ</strong>) и штрафы до 700 тыс. ₽ (<strong>ст. 46 БК РФ</strong>) пополняют бюджеты муниципалитетов, снижая дотации из региона.",
+    btnText: "📑 Передать материалы в Минимущество региона и земконтроль", btnClass: "btn btn-primary"
   },
   {
+    id: "РФ-ОРСК",
     title: "#РФ-ОРСК · Модуль ЧС онлайн (паводок)",
-    sub: "ЭШЕЛОН 3 РФ: ОЦЕНКА УЩЕРБА ЗА 2 ЧАСА · Венн: 95%",
-    score: "ЧС",
+    sub: "ЭШЕЛОН 3 РФ: ОЦЕНКА ЗОНЫ ЗАТОПЛЕНИЯ ЗА 2 ЧАСА · Венн: 95%",
+    score: "97", scoreCap: "Индекс ЧС",
+    coords: [51.2290, 58.4750], zoom: 14,
+    polyEgrn: [[51.236, 58.462], [51.236, 58.488], [51.222, 58.488], [51.222, 58.462]],
+    polyFact: [[51.234, 58.465], [51.235, 58.484], [51.224, 58.486], [51.223, 58.466]],
+    polyColor: "#38bdf8",
+    caption: "<strong>Экстренный режим ЧС (г. Орск, 51.2290° N, 58.4750° E):</strong> Всепогодный радар «Кондор-ФКА» сквозь штормовую облачность выделяет зеркало разлива воды и пересекает его с контурами домов ЕГРН за 2 часа.",
     bg: "linear-gradient(135deg, #0c4a6e, #0369a1)", border: "#38bdf8",
-    loc: "МЧС РФ · Минстрой · ППК «ФРТ» · Регион",
-    bal: "Жилые дома, ТЦ и коммунальные объекты ЕГРН",
-    ai: "248 зданий и 3 подстанции в зоне затопления", aiColor: "#7dd3fc",
-    dates: "Кондор-ФКА (сквозь тучи) + Канопус-В (онлайн)",
-    cost: "Ведомость ущерба за 2 часа вместо 3 недель", costColor: "#7dd3fc",
+    loc: "МЧС России · Минстрой РФ · ППК «ФРТ» · Регион",
+    bal: "Жилой фонд и социально-коммунальные объекты в ЕГРН",
+    dates: "«Кондор-ФКА» (зеркальный спад VV на воде сквозь тучи)", datesColor: "#7dd3fc",
+    ai: "Автоматическое пересечение зоны воды с контурами ЕГРН", aiColor: "#7dd3fc",
+    cost: "Пообъектная ведомость за 2 часа вместо недель обхода", costColor: "#7dd3fc",
     factors: [
-      ["Модель Б (SAR): зеркало воды сквозь облачность", "96%", "96%", "#38bdf8"],
-      ["Автоматическое пересечение с контурами ЕГРН", "95%", "95%", "#22c55e"],
-      ["Защита бюджета от необоснованных компенсаций", "92%", "92%", "#fbbf24"]
+      ["Модель Б («Кондор-ФКА» SAR): контур воды сквозь облака", "96%", "96%", "#38bdf8"],
+      ["Пересечение с кадастровой картой зданий ЕГРН в PostGIS", "95%", "95%", "#22c55e"],
+      ["Защита бюджета от необоснованных выплат", "92%", "92%", "#fbbf24"]
     ],
-    exp: "<strong>Экстренный контур ЧС (кейс прорыва дамбы в Орске):</strong> Радар «Кондор-ФКА» видит разлив воды ночью и сквозь штормовые тучи. Через 2 часа МЧС, Минстрой и губернатор получают точный пообъектный реестр для расчёта выплат и жилищных сертификатов.",
-    btnText: "🌊 Выгрузить пообъектную ведомость ущерба для МЧС и ФРТ", btnClass: "btn btn-primary"
+    exp: "<strong>Экстренный гуманитарный контур ЧС (кейс Орска):</strong> В первые часы паводка территория закрыта облачностью, а дороги размыты. Всепогодный радар <strong>«Кондор-ФКА»</strong> видит водную гладь ночью и сквозь тучи, за <strong>2 часа</strong> формируя пообъектный реестр пострадавших зданий для МЧС, Минстроя и ППК «ФРТ».",
+    btnText: "🌊 Выгрузить пообъектную ведомость зоны ЧС для МЧС и ФРТ", btnClass: "btn btn-primary"
   }
 ];
 
-function selectObj(idx) {
-  const items = document.querySelectorAll('.obj-item');
-  items.forEach((el, i) => el.classList.toggle('selected', i === idx));
-  for (let i = 0; i < 6; i++) {
-    const p = document.getElementById('poly-' + i);
-    if (p) p.classList.toggle('active-poly', i === idx);
-  }
-  document.getElementById('poly-4').classList.toggle('show', idx === 4);
-  document.getElementById('poly-5').classList.toggle('show', idx === 5);
+let currentIdx = 0;
+let map = null;
+let egrnLayer = null;
+let factLayer = null;
+let showCadastre = true;
 
+function initMap() {
+  if (typeof L === "undefined") return;
+  map = L.map("sat-map", { zoomControl: true, attributionControl: false }).setView(objects[0].coords, objects[0].zoom);
+  L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+    maxZoom: 19
+  }).addTo(map);
+  renderMapPolygons(0);
+}
+
+function renderMapPolygons(idx) {
+  if (!map) return;
+  if (egrnLayer) map.removeLayer(egrnLayer);
+  if (factLayer) map.removeLayer(factLayer);
   const d = objects[idx];
-  const sb = document.getElementById('score-box');
+  if (showCadastre) {
+    egrnLayer = L.polygon(d.polyEgrn, {
+      color: "#cbd5e1", weight: 2, dashArray: "6, 5", fillOpacity: 0.05
+    }).addTo(map).bindPopup(`<b>Контур реестра / ЕГРН</b><br>${d.bal}`);
+  }
+  factLayer = L.polygon(d.polyFact, {
+    color: d.polyColor, weight: 3, fillColor: d.polyColor, fillOpacity: 0.34
+  }).addTo(map).bindPopup(`<b>${d.title}</b><br>${d.ai}<br><i>${d.cost}</i>`);
+  map.setView(d.coords, d.zoom, { animate: true });
+}
+
+function toggleLayerPill(el) {
+  el.classList.toggle("on");
+}
+
+function toggleCadastre(el) {
+  el.classList.toggle("on");
+  showCadastre = el.classList.contains("on");
+  renderMapPolygons(currentIdx);
+}
+
+function resetCurrentView() {
+  renderMapPolygons(currentIdx);
+}
+
+function selectObj(idx) {
+  currentIdx = idx;
+  document.querySelectorAll(".obj-item").forEach((el, i) => el.classList.toggle("selected", i === idx));
+  const d = objects[idx];
+  const sb = document.getElementById("score-box");
   sb.style.background = d.bg;
   sb.style.borderColor = d.border;
-  document.getElementById('o-title').textContent = d.title;
-  document.getElementById('o-sub').textContent = d.sub;
-  document.getElementById('o-score').textContent = d.score;
-  document.getElementById('m-loc').textContent = d.loc;
-  document.getElementById('m-bal').textContent = d.bal;
-  const aiEl = document.getElementById('m-ai');
+  document.getElementById("o-title").textContent = d.title;
+  document.getElementById("o-sub").textContent = d.sub;
+  document.getElementById("o-score").textContent = d.score;
+  document.getElementById("o-score-cap").textContent = d.scoreCap;
+  document.getElementById("m-loc").textContent = d.loc;
+  document.getElementById("m-bal").textContent = d.bal;
+  const dtEl = document.getElementById("m-dates");
+  dtEl.textContent = d.dates; dtEl.style.color = d.datesColor;
+  const aiEl = document.getElementById("m-ai");
   aiEl.textContent = d.ai; aiEl.style.color = d.aiColor;
-  document.getElementById('m-dates').textContent = d.dates;
-  const cEl = document.getElementById('m-cost');
+  const cEl = document.getElementById("m-cost");
   cEl.textContent = d.cost; cEl.style.color = d.costColor;
+  document.getElementById("map-caption").innerHTML = d.caption;
 
   for (let k = 0; k < 3; k++) {
     document.getElementById(`f${k+1}-n`).textContent = d.factors[k][0];
@@ -598,37 +647,67 @@ function selectObj(idx) {
     const fb = document.getElementById(`f${k+1}-b`);
     fb.style.width = d.factors[k][2]; fb.style.background = d.factors[k][3];
   }
-  document.getElementById('o-exp').innerHTML = d.exp;
-  const btn = document.getElementById('btn-main');
+  document.getElementById("o-exp").innerHTML = d.exp;
+  const btn = document.getElementById("btn-main");
   btn.textContent = d.btnText;
   btn.className = d.btnClass;
-  document.getElementById('toast-msg').style.display = 'none';
+  renderMapPolygons(idx);
 }
 
 function filterList(cat, chipEl) {
-  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-  chipEl.classList.add('active');
+  document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+  chipEl.classList.add("active");
   let firstIdx = -1;
-  document.querySelectorAll('.obj-item').forEach((el, i) => {
-    const show = (cat === 'all') || (el.dataset.cat === cat);
-    el.style.display = show ? 'block' : 'none';
+  document.querySelectorAll(".obj-item").forEach((el, i) => {
+    const show = (cat === "all") || (el.dataset.cat === cat);
+    el.style.display = show ? "block" : "none";
     if (show && firstIdx === -1) firstIdx = i;
   });
   if (firstIdx !== -1) selectObj(firstIdx);
 }
 
-function triggerAction(kind) {
-  const t = document.getElementById('toast-msg');
-  const title = document.getElementById('o-title').textContent;
-  if (kind === 'main') {
-    t.textContent = '✓ Сформирован управленческий акт по объекту «' + title + '».';
-  } else if (kind === 'field') {
-    t.textContent = '✓ Координаты и космоснимок направлены инспектору для выездной проверки.';
+function openActModal(kind) {
+  const d = objects[currentIdx];
+  const dlg = document.getElementById("act-dialog");
+  const titleEl = document.getElementById("act-title");
+  const bodyEl = document.getElementById("act-body");
+
+  if (kind === "field") {
+    titleEl.textContent = "Маршрутный лист выездного обследования (индикатор риска по 248-ФЗ)";
+  } else if (kind === "export") {
+    titleEl.textContent = "Цифровой паспорт объекта и GeoJSON-выгрузка (ГИС «КосмоРевизор»)";
   } else {
-    t.textContent = '✓ Выгружен паспорт PDF и контур GeoJSON для внесения в ЕГРН / ГИС.';
+    titleEl.textContent = "Предпроверочное заключение для принятия управленческого решения";
   }
-  t.style.display = 'block';
+
+  bodyEl.innerHTML = `
+    <p><strong>Объект:</strong> ${d.title} &nbsp;|&nbsp; <strong>Координаты:</strong> ${d.coords[0].toFixed(4)}° N, ${d.coords[1].toFixed(4)}° E</p>
+    <p><strong>Заказчик / Контур:</strong> ${d.loc}</p>
+    <p><strong>Сведения реестра:</strong> ${d.bal}</p>
+    <p><strong>Радар «Кондор-ФКА» («Всепогодный страж», 1–2 м):</strong> ${d.dates}</p>
+    <p><strong>Оптика «Ресурс-П» («Детализатор», 0,5–0,7 м):</strong> ${d.ai}</p>
+    <p><strong>Итоговый индекс риска:</strong> ${d.score} / 100 &nbsp;|&nbsp; <strong>Статус:</strong> ${d.sub}</p>
+    <p><strong>Рекомендуемое юридическое действие:</strong> ${d.cost}</p>
+    <p style="margin-top:8px;color:#94a3b8;font-size:11px;">Сформировано платформой ГИС «КосмоРевизор» (АО «РКС» · Команда 15: С. Юпитер, П. Коротков, М. Гулягин). Документ является законным индикатором предпроверочного скрининга (248-ФЗ) и сокращает сплошные выездные обследования (60–100 тыс. ₽ / 10–15 дней на объект).</p>
+  `;
+  dlg.returnValue = "";
+  dlg.showModal();
 }
+
+// Safari / legacy fallback for dialog closedby="any" light dismiss (pointerdown + pointerup outside bounds)
+const actDialog = document.getElementById("act-dialog");
+actDialog.addEventListener("close", () => { actDialog.returnValue = ""; });
+if (!("closedBy" in HTMLDialogElement.prototype)) {
+  const outside = (e, dialog) => {
+    const r = dialog.getBoundingClientRect();
+    return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+  };
+  let pressedOutside = false;
+  actDialog.addEventListener("pointerdown", (e) => { pressedOutside = outside(e, actDialog); });
+  actDialog.addEventListener("pointerup", (e) => { if (pressedOutside && outside(e, actDialog)) actDialog.close(); });
+}
+
+window.addEventListener("DOMContentLoaded", initMap);
 </script>
 </body>
 </html>
